@@ -12,13 +12,16 @@
 	],
 	"autoload" : {
 		"psr-4" : {
-			"TechDivision\\Import\\Product\\Bundle" : [ "src/", "tests/" ]
+			"TechDivision\\Import\\Product\\Bundle" : [
+				"src/",
+				"tests/"
+			]
 		}
 	},
-    "repositories" : [{
-            "type" : "git",
-            "url" : "https://gitlab.tdintern.de/wagnert/techdivision-import-product.git",
-            "name" : "techdivision/import-product"
-        }
-    ]
+	"repositories" : [{
+			"type" : "git",
+			"url" : "git@gitlab.tdintern.de:wagnert/techdivision-import-product",
+			"name" : "techdivision/import-product"
+		}
+	]
 }
