@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Bundle\Utils;
 
-use TechDivision\Import\Product\Bundle\Utils\ColumnKeys as FallbackColumnKeys
+use TechDivision\Import\Product\Utils\ColumnKeys as FallbackColumnKeys;
 
 /**
  * Utility class containing the CSV column names.

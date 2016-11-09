@@ -20,8 +20,9 @@
 
 namespace TechDivision\Import\Product\Bundle\Subjects;
 
-use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
-use TechDivision\Import\Product\Bundle\Utils\RegistryKeys;
+use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
  * A SLSB that handles the process to import product variants.
@@ -34,6 +35,13 @@ use TechDivision\Import\Product\Bundle\Utils\RegistryKeys;
  */
 class BundleSubject extends AbstractSubject
 {
+
+    /**
+     * The processor to write the necessary product bundle data.
+     *
+     * @var \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface
+     */
+    protected $productProcessor;
 
     /**
      * The value for the price type 'fixed'.
@@ -93,6 +101,28 @@ class BundleSubject extends AbstractSubject
         'fixed'   => BundleSubject::PRICE_TYPE_FIXED,
         'percent' => BundleSubject::PRICE_TYPE_PERCENT
     );
+
+    /**
+     * Set's the product bundle processor instance.
+     *
+     * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productProcessor The product bundle processor instance
+     *
+     * @return void
+     */
+    public function setProductProcessor(ProductBundleProcessorInterface $productProcessor)
+    {
+        $this->productProcessor = $productProcessor;
+    }
+
+    /**
+     * Return's the product bundle processor instance.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface The product bundle processor instance
+     */
+    public function getProductProcessor()
+    {
+        return $this->productProcessor;
+    }
 
     /**
      * Intializes the previously loaded global data for exactly one variants.

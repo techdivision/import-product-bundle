@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Callbacks\Product\BundleTypeCallback
+ * TechDivision\Import\Product\Bundle\Callbacks\BundleTypeCallback
  *
  * NOTICE OF LICENSE
  *
@@ -18,7 +18,9 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Bundle\Callbacks\Product;
+namespace TechDivision\Import\Product\Bundle\Callbacks;
+
+use TechDivision\Import\Callbacks\AbstractCallback;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -29,7 +31,7 @@ namespace TechDivision\Import\Product\Bundle\Callbacks\Product;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class BundleTypeCallback extends AbstractProductImportCallback
+class BundleTypeCallback extends AbstractCallback
 {
 
     /**

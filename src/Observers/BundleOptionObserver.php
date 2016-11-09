@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Observers\Product\BundleOptionObserver
+ * TechDivision\Import\Product\Bundle\Observers\BundleOptionObserver
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,11 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Bundle\Observers\Product;
+namespace TechDivision\Import\Product\Bundle\Observers;
 
+use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
-use TechDivision\Import\Product\Bundle\Utils\MemberNames;
-use TechDivision\Import\Product\Bundle\Utils\StoreViewCodes;
-use TechDivision\Import\Product\Bundle\Observers\Product\AbstractProductImportObserver;
+use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
  * A SLSB that handles the process to import product bunches.

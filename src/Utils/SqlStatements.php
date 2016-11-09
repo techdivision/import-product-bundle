@@ -77,6 +77,20 @@ class SqlStatements
     }
 
     /**
+     * The SQL statement to create a new product bundle option.
+     *
+     * @var string
+     */
+    const CREATE_PRODUCT_BUNDLE_OPTION = 'INSERT
+                                            INTO catalog_product_bundle_option (
+                                                     parent_id,
+                                                     required,
+                                                     position,
+                                                     type
+                                                   )
+                                            VALUES (?, ?, ?, ?)';
+
+    /**
      * The SQL statement to create a new product bundle option value.
      *
      * @var string

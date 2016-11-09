@@ -29,7 +29,7 @@ namespace TechDivision\Import\Product\Bundle\Services;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductPundleProcessor implements ProductBundleProcessorInterface
+class ProductBundleProcessor implements ProductBundleProcessorInterface
 {
 
     /**
@@ -38,6 +38,13 @@ class ProductPundleProcessor implements ProductBundleProcessorInterface
      * @var \PDO
      */
     protected $connection;
+
+    /**
+     * The repository to access EAV attribute option values.
+     *
+     * @var \TechDivision\Import\Repositories\EavAttributeOptionValueRepository
+     */
+    protected $eavAttributeOptionValueRepository;
 
     /**
      * The action for product bundle option CRUD methods.
@@ -134,6 +141,28 @@ class ProductPundleProcessor implements ProductBundleProcessorInterface
     }
 
     /**
+     * Set's the repository to access EAV attribute option values.
+     *
+     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
+     *
+     * @return void
+     */
+    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
+    {
+        $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
+    }
+
+    /**
+     * Return's the repository to access EAV attribute option values.
+     *
+     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepository The repository instance
+     */
+    public function getEavAttributeOptionValueRepository()
+    {
+        return $this->eavAttributeOptionValueRepository;
+    }
+
+    /**
      * Set's the action with the product bundle option CRUD methods.
      *
      * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction $productBundleOptionAction The action with the product bundle option CRUD methods
@@ -219,6 +248,19 @@ class ProductPundleProcessor implements ProductBundleProcessorInterface
     public function getProductBundleSelectionPriceAction()
     {
         return $this->productBundleSelectionPriceAction;
+    }
+
+    /**
+     * Return's the attribute option value with the passed value and store ID.
+     *
+     * @param mixed   $value   The option value
+     * @param integer $storeId The ID of the store
+     *
+     * @return array|boolean The attribute option value instance
+     */
+    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
+    {
+        return $this->getEavAttributeOptionValueRepository()->findEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
     }
 
     /**

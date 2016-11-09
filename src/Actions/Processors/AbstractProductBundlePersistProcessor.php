@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleSelectionPriceAction
+ * TechDivision\Import\Product\Bundle\Actions\Processors\AbstractProductBundlePersistProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,13 @@
  * @link      http://www.appserver.io
  */
 
-namespace TechDivision\Import\Product\Bundle\Actions;
+namespace TechDivision\Import\Product\Bundle\Actions\Processors;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Product\Bundle\Utils\SqlStatements;
+use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
 
 /**
- * A SLSB providing repository functionality for product bundle selection price CRUD actions.
+ * The product category persist processor implementation.
  *
  * @author    Tim Wagner <tw@appserver.io>
  * @copyright 2015 TechDivision GmbH <info@appserver.io>
@@ -31,18 +32,17 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductBundleSelectionPriceAction extends AbstractAction
+abstract class AbstractProductBundlePersistProcessor extends AbstractPersistProcessor
 {
 
     /**
-     * Persist's the passed row.
+     * Return's the passed statement from the Magento specific
+     * utility class.
      *
-     * @param array $row The row to persist
-     *
-     * @return string The last inserted ID
+     * @return string The utility class name
      */
-    public function persist($row)
+    protected function getUtilityClassName()
     {
-        return $this->getPersistProcessor()->execute($row);
+        return SqlStatements::getUtilityClassName($this->getMagentoEdition(), $this->getMagentoVersion());
     }
 }

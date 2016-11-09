@@ -29,7 +29,7 @@ namespace TechDivision\Import\Product\Bundle\Actions\Processors;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductBundleSelectionPersistProcessor extends AbstractPersistProcessor
+class ProductBundleSelectionPersistProcessor extends AbstractProductBundlePersistProcessor
 {
 
     /**

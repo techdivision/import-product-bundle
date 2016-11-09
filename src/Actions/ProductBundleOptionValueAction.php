@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions;
 
+use TechDivision\Import\Actions\AbstractAction;
+
 /**
  * A SLSB providing repository functionality for product bundle option value CRUD actions.
  *
