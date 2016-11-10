@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Bundle\Actions\Processors\Batch;
 
 use TechDivision\Import\Product\Bundle\Utils\SqlStatements;
+use TechDivision\Import\Actions\Processors\Batch\AbstractPersistBatchProcessor;
 
 /**
  * The product bundle option persist batch processor implementation.

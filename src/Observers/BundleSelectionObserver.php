@@ -53,8 +53,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
             return $row;
         }
 
-        // load the product bundle option name/SKU
-        $name = $row[$headers[ColumnKeys::BUNDLE_VALUE_NAME]];
+        // load the product bundle option SKU
         $parentSku = $row[$headers[ColumnKeys::BUNDLE_PARENT_SKU]];
 
         // load parent/option ID
