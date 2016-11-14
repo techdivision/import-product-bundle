@@ -41,4 +41,17 @@ class ProductBundleSelectionPricePersistProcessor extends AbstractProductBundleP
         $utilityClassName = $this->getUtilityClassName();
         return $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE;
     }
+
+    /**
+     * Persist's the passed row.
+     *
+     * @param array $row The row to persist
+     *
+     * @return string The last inserted ID
+     */
+    public function execute($row)
+    {
+        $this->getPreparedStatement()->execute($row);
+        return $this->getConnection()->lastInsertId();
+    }
 }
