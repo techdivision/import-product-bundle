@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Bundle\Services;
 
 use TechDivision\Import\ConfigurationInterface;
+use TechDivision\Import\Services\AbstractProcessorFactory;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction;
@@ -39,8 +40,18 @@ use TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelection
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductBundleProcessorFactory
+class ProductBundleProcessorFactory extends AbstractProcessorFactory
 {
+
+    /**
+     * Return's the processor class name.
+     *
+     * @return string The processor class name
+     */
+    protected static function getProcessorType()
+    {
+        return 'TechDivision\Import\Product\Bundle\Services\ProductBundleProcessor';
+    }
 
     /**
      * Factory method to create a new product bundle processor instance.
@@ -94,7 +105,8 @@ class ProductBundleProcessorFactory
         $productBundleSelectionPriceAction->setPersistProcessor($productBundleSelectionPricePersistProcessor);
 
         // initialize the product bundle processor
-        $productBundleProcessor = new ProductBundleProcessor();
+        $processorType = ProductBundleProcessorFactory::getProcessorType();
+        $productBundleProcessor = new $processorType();
         $productBundleProcessor->setConnection($connection);
         $productBundleProcessor->setProductBundleOptionAction($productBundleOptionAction);
         $productBundleProcessor->setProductBundleOptionValueAction($productBundleOptionValueAction);
