@@ -50,6 +50,7 @@ class ProductBundleSelectionPricePersistBatchProcessor extends AbstractPersistBa
      */
     protected function getStatement()
     {
-        return SqlStatements::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE;
     }
 }

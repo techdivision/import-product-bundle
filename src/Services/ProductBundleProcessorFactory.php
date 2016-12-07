@@ -20,8 +20,8 @@
 
 namespace TechDivision\Import\Product\Bundle\Services;
 
-use TechDivision\Import\ConfigurationInterface;
-use TechDivision\Import\Services\AbstractProcessorFactory;
+use TechDivision\Import\Configuration\SubjectInterface;
+use TechDivision\Import\Product\Services\AbstractProductProcessorFactory;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction;
@@ -40,7 +40,7 @@ use TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelection
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductBundleProcessorFactory extends AbstractProcessorFactory
+class ProductBundleProcessorFactory extends AbstractProductProcessorFactory
 {
 
     /**
@@ -56,22 +56,20 @@ class ProductBundleProcessorFactory extends AbstractProcessorFactory
     /**
      * Factory method to create a new product bundle processor instance.
      *
-     * @param \PDO                                       $connection    The PDO connection to use
-     * @param TechDivision\Import\ConfigurationInterface $configuration The subject configuration
+     * @param \PDO                                               $connection    The PDO connection to use
+     * @param TechDivision\Import\Configuration\SubjectInterface $configuration The subject configuration
      *
      * @return \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessor The processor instance
      */
-    public function factory(\PDO $connection, ConfigurationInterface $configuration)
+    public static function factory(\PDO $connection, SubjectInterface $configuration)
     {
 
-        // extract Magento edition/version
-        $magentoEdition = $configuration->getMagentoEdition();
-        $magentoVersion = $configuration->getMagentoVersion();
+        // load the utility class name
+        $utilityClassName = $configuration->getUtilityClassName();
 
         // initialize the action that provides product bundle option CRUD functionality
         $productBundleOptionPersistProcessor = new ProductBundleOptionPersistProcessor();
-        $productBundleOptionPersistProcessor->setMagentoEdition($magentoEdition);
-        $productBundleOptionPersistProcessor->setMagentoVersion($magentoVersion);
+        $productBundleOptionPersistProcessor->setUtilityClassName($utilityClassName);
         $productBundleOptionPersistProcessor->setConnection($connection);
         $productBundleOptionPersistProcessor->init();
         $productBundleOptionAction = new ProductBundleOptionAction();
@@ -79,8 +77,7 @@ class ProductBundleProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product bundle option CRUD functionality
         $productBundleOptionValuePersistProcessor = new ProductBundleOptionValuePersistProcessor();
-        $productBundleOptionValuePersistProcessor->setMagentoEdition($magentoEdition);
-        $productBundleOptionValuePersistProcessor->setMagentoVersion($magentoVersion);
+        $productBundleOptionValuePersistProcessor->setUtilityClassName($utilityClassName);
         $productBundleOptionValuePersistProcessor->setConnection($connection);
         $productBundleOptionValuePersistProcessor->init();
         $productBundleOptionValueAction = new ProductBundleOptionValueAction();
@@ -88,8 +85,7 @@ class ProductBundleProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product bundle option CRUD functionality
         $productBundleSelectionPersistProcessor = new ProductBundleSelectionPersistProcessor();
-        $productBundleSelectionPersistProcessor->setMagentoEdition($magentoEdition);
-        $productBundleSelectionPersistProcessor->setMagentoVersion($magentoVersion);
+        $productBundleSelectionPersistProcessor->setUtilityClassName($utilityClassName);
         $productBundleSelectionPersistProcessor->setConnection($connection);
         $productBundleSelectionPersistProcessor->init();
         $productBundleSelectionAction = new ProductBundleSelectionAction();
@@ -97,8 +93,7 @@ class ProductBundleProcessorFactory extends AbstractProcessorFactory
 
         // initialize the action that provides product bundle option CRUD functionality
         $productBundleSelectionPricePersistProcessor = new ProductBundleSelectionPricePersistProcessor();
-        $productBundleSelectionPricePersistProcessor->setMagentoEdition($magentoEdition);
-        $productBundleSelectionPricePersistProcessor->setMagentoVersion($magentoVersion);
+        $productBundleSelectionPricePersistProcessor->setUtilityClassName($utilityClassName);
         $productBundleSelectionPricePersistProcessor->setConnection($connection);
         $productBundleSelectionPricePersistProcessor->init();
         $productBundleSelectionPriceAction = new ProductBundleSelectionPriceAction();

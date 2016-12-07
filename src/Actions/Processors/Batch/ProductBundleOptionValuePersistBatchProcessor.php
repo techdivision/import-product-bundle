@@ -50,6 +50,7 @@ class ProductBundleOptionValuePersistBatchProcessor extends AbstractPersistBatch
      */
     protected function getStatement()
     {
-        return SqlStatements::CREATE_PRODUCT_BUNDLE_OPTION_VALUE;
+        $utilityClassName = $this->getUtilityClassName();
+        return $utilityClassName::CREATE_PRODUCT_BUNDLE_OPTION_VALUE;
     }
 }

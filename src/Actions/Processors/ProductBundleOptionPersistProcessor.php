@@ -20,6 +20,8 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions\Processors;
 
+use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+
 /**
  * The product bundle option persist processor implementation.
  *
@@ -29,7 +31,7 @@ namespace TechDivision\Import\Product\Bundle\Actions\Processors;
  * @link      https://github.com/wagnert/csv-import
  * @link      http://www.appserver.io
  */
-class ProductBundleOptionPersistProcessor extends AbstractProductBundlePersistProcessor
+class ProductBundleOptionPersistProcessor extends AbstractPersistProcessor
 {
 
     /**
