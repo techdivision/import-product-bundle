@@ -140,28 +140,13 @@ class BundleSubject extends AbstractSubject
         $status = $registryProcessor->getAttribute($this->serial);
 
         // load the stores we've initialized before
-        $this->stores = $status['globalData'][RegistryKeys::STORES];
+        $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
 
         // load the attribute set we've prepared intially
-        $this->skuEntityIdMapping = $status['skuEntityIdMapping'];
+        $this->skuEntityIdMapping = $status[RegistryKeys::SKU_ENTITY_ID_MAPPING];
 
         // prepare the callbacks
         parent::setUp();
-    }
-
-    /**
-     * Clean up the global data after importing the bundles.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-
-        // load the registry processor
-        // $registryProcessor = $this->getRegistryProcessor();
-
-        // update the status of the actual import process
-        // $registryProcessor->mergeAttributesRecursive($this->serial, array('bundles' => array($this->getUid() => array('status' => 1))));
     }
 
     /**
