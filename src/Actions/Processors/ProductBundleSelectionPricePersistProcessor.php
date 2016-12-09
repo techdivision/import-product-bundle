@@ -35,8 +35,10 @@ class ProductBundleSelectionPricePersistProcessor extends AbstractPersistProcess
 {
 
     /**
-     * {@inheritDoc}
-     * @see \TechDivision\Import\Product\Bundle\Actions\Processors\AbstractPersistProcessor::getStatement()
+     * Return's the SQL statement that has to be prepared.
+     *
+     * @return string The SQL statement
+     * @see \TechDivision\Import\Actions\Processors\AbstractBaseProcessor::getStatement()
      */
     protected function getStatement()
     {

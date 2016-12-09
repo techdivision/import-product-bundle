@@ -123,7 +123,7 @@ interface ProductBundleProcessorInterface
     /**
      * Persist's the passed product bundle selection data and return's the ID.
      *
-     * @param array $productBundleOption The product bundle selection data to persist
+     * @param array $productBundleSelection The product bundle selection data to persist
      *
      * @return string The ID of the persisted entity
      */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleOptionAction
+ * TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction
  *
  * NOTICE OF LICENSE
  *

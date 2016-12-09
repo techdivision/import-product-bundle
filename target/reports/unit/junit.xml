@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="techdivision/import-product-bundle PHPUnit testsuite" tests="1" assertions="3" failures="0" errors="0" time="0.042100">
+    <testsuite name="TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionTest" file="/Users/wagnert/Workspace/techdivision-import-product-bundle/tests/Actions/ProductBundleOptionActionTest.php" tests="1" assertions="3" failures="0" errors="0" time="0.042100">
+      <testcase name="testPersistWithSuccess" class="TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionTest" file="/Users/wagnert/Workspace/techdivision-import-product-bundle/tests/Actions/ProductBundleOptionActionTest.php" line="40" assertions="3" time="0.042100"/>
+    </testsuite>
+  </testsuite>
+</testsuites>
