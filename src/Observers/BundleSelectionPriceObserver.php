@@ -51,8 +51,11 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
         // load the header information
         $headers = $this->getHeaders();
 
-        // initialize the store view code
-        $storeViewCode = $row[$headers[ColumnKeys::STORE_VIEW_CODE]] ?: StoreViewCodes::ADMIN;
+        // prepare the store view code
+        $this->prepareStoreViewCode($row);
+
+        // load the store view code
+        $storeViewCode = $this->getStoreViewCode(StoreViewCodes::ADMIN);
 
         // load the store/website ID
         $store = $this->getStoreByStoreCode($storeViewCode);
