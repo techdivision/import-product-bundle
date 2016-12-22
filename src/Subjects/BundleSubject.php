@@ -21,7 +21,7 @@
 namespace TechDivision\Import\Product\Bundle\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
-use TechDivision\Import\Subjects\AbstractSubject;
+use TechDivision\Import\Product\Subjects\AbstractProductSubject;
 use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
@@ -33,15 +33,8 @@ use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class BundleSubject extends AbstractSubject
+class BundleSubject extends AbstractProductSubject
 {
-
-    /**
-     * The processor to write the necessary product bundle data.
-     *
-     * @var \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface
-     */
-    protected $productProcessor;
 
     /**
      * The value for the price type 'fixed'.
@@ -56,13 +49,6 @@ class BundleSubject extends AbstractSubject
      * @var integer
      */
     const PRICE_TYPE_PERCENT = 1;
-
-    /**
-     * The available stores.
-     *
-     * @var array
-     */
-    protected $stores = array();
 
     /**
      * The mapping for the SKUs to the created entity IDs.
@@ -103,28 +89,6 @@ class BundleSubject extends AbstractSubject
     );
 
     /**
-     * Set's the product bundle processor instance.
-     *
-     * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productProcessor The product bundle processor instance
-     *
-     * @return void
-     */
-    public function setProductProcessor(ProductBundleProcessorInterface $productProcessor)
-    {
-        $this->productProcessor = $productProcessor;
-    }
-
-    /**
-     * Return's the product bundle processor instance.
-     *
-     * @return \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface The product bundle processor instance
-     */
-    public function getProductProcessor()
-    {
-        return $this->productProcessor;
-    }
-
-    /**
      * Intializes the previously loaded global data for exactly one variants.
      *
      * @return void
@@ -133,20 +97,17 @@ class BundleSubject extends AbstractSubject
     public function setUp()
     {
 
+        // invoke the parent method
+        parent::setUp();
+
         // load the entity manager and the registry processor
         $registryProcessor = $this->getRegistryProcessor();
 
         // load the status of the actual import process
         $status = $registryProcessor->getAttribute($this->serial);
 
-        // load the stores we've initialized before
-        $this->stores = $status[RegistryKeys::GLOBAL_DATA][RegistryKeys::STORES];
-
         // load the attribute set we've prepared intially
         $this->skuEntityIdMapping = $status[RegistryKeys::SKU_ENTITY_ID_MAPPING];
-
-        // prepare the callbacks
-        parent::setUp();
     }
 
     /**

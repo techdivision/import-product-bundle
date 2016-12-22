@@ -37,6 +37,11 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 class BundleOptionValueObserver extends AbstractProductImportObserver
 {
 
+    /**
+     * The option value store mapping.
+     *
+     * @var array
+     */
     protected $optionValueStoreMapping = array();
 
     /**
@@ -56,16 +61,17 @@ class BundleOptionValueObserver extends AbstractProductImportObserver
         // load the product bundle option name
         $name = $row[$headers[ColumnKeys::BUNDLE_VALUE_NAME]];
 
-        // initialize the store view code
-        $storeViewCode = $row[$headers[ColumnKeys::STORE_VIEW_CODE]] ?: StoreViewCodes::ADMIN;
+        // prepare the store view code
+        $this->prepareStoreViewCode($row);
 
         // load the store/website ID
-        $store = $this->getStoreByStoreCode($storeViewCode);
+        $store = $this->getStoreByStoreCode($this->getStoreViewCode(StoreViewCodes::ADMIN));
         $storeId = $store[MemberNames::STORE_ID];
 
         // load the actual option ID
         $optionId = $this->getLastOptionId();
 
+        // if the store has already been mapped, return immediately
         if (isset($this->optionValueStoreMapping[$optionId]) &&
             in_array($storeId, $this->optionValueStoreMapping[$optionId])
         ) {
@@ -75,6 +81,7 @@ class BundleOptionValueObserver extends AbstractProductImportObserver
         // save the product bundle option value
         $this->persistProductBundleOptionValue(array($optionId, $storeId, $name));
 
+        // add the store => option mapping
         $this->optionValueStoreMapping[$optionId][] = $storeId;
 
         // returns the row

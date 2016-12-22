@@ -1,3 +1,16 @@
+# Version 1.0.0-alpha3
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactoring store view code handling
+* BundleSubject now extends AbstractProductSubject
+* Add Robo.li composer dependeny + task configuration
+* ProductBundleProcessorInterface now extends ProductProcessorInterface
+
 # Version 1.0.0-alpha2
 
 ## Bugfixes
@@ -6,7 +19,7 @@
 
 ## Features
 
-* 
+* Refactoring to allow multiple prepared statements per CRUD processor instance
 
 # Version 1.0.0-alpha1
 
