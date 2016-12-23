@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionValuePersistProcessor
+ * TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionValueCreateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
+use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
 
 /**
- * The product bundle option value persist processor implementation.
+ * The product bundle option value create processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +31,7 @@ use TechDivision\Import\Actions\Processors\AbstractPersistProcessor;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleOptionValuePersistProcessor extends AbstractPersistProcessor
+class ProductBundleOptionValueCreateProcessor extends AbstractCreateProcessor
 {
 
     /**

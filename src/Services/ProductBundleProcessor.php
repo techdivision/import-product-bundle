@@ -272,7 +272,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleOption($productBundleOption)
     {
-        return $this->getProductBundleOptionAction()->persist($productBundleOption);
+        return $this->getProductBundleOptionAction()->create($productBundleOption);
     }
 
     /**
@@ -284,7 +284,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleOptionValue($productBundleOptionValue)
     {
-        $this->getProductBundleOptionValueAction()->persist($productBundleOptionValue);
+        $this->getProductBundleOptionValueAction()->create($productBundleOptionValue);
     }
 
     /**
@@ -296,7 +296,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleSelection($productBundleSelection)
     {
-        return $this->getProductBundleSelectionAction()->persist($productBundleSelection);
+        return $this->getProductBundleSelectionAction()->create($productBundleSelection);
     }
 
     /**
@@ -308,6 +308,6 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleSelectionPrice($productBundleSelectionPrice)
     {
-        return $this->getProductBundleSelectionPriceAction()->persist($productBundleSelectionPrice);
+        return $this->getProductBundleSelectionPriceAction()->create($productBundleSelectionPrice);
     }
 }
