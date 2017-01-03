@@ -23,9 +23,10 @@ namespace TechDivision\Import\Product\Bundle\Observers;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Oberserver that provides functionality for the bundle selection replace operation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -47,19 +48,50 @@ class BundleSelectionObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
+
+        // process the functionality and return the row
+        $this->process();
+
+        // return the processed row
+        return $this->getRow();
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return array The processed row
+     */
+    protected function process()
+    {
 
         // prepare the store view code
-        $this->prepareStoreViewCode($row);
+        $this->prepareStoreViewCode($this->getRow());
 
         // return immediately if we're have no store view code set
         if (StoreViewCodes::ADMIN !== $this->getStoreViewCode(StoreViewCodes::ADMIN)) {
-            return $row;
+            return;
         }
 
+        // prepare, initialize and persist the product bundle selection data
+        $productBundleSelection = $this->initializeBundleSelection($this->prepareAttributes());
+        $selectionId = $this->persistProductBundleSelection($productBundleSelection);
+
+        // add the mapping for the child SKU => selection ID
+        $this->addChildSkuSelectionIdMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU), $selectionId);
+    }
+
+    /**
+     * Prepare the attributes of the entity that has to be persisted.
+     *
+     * @return array The prepared attributes
+     */
+    protected function prepareAttributes()
+    {
+
         // load the product bundle option SKU
-        $parentSku = $row[$headers[ColumnKeys::BUNDLE_PARENT_SKU]];
+        $parentSku = $this->getValue(ColumnKeys::BUNDLE_PARENT_SKU);
 
         // load parent/option ID
         $parentId = $this->mapSkuToEntityId($parentSku);
@@ -68,37 +100,45 @@ class BundleSelectionObserver extends AbstractProductImportObserver
         $optionId = $this->getLastOptionId();
 
         // load the child ID
-        $childSku = $row[$headers[ColumnKeys::BUNDLE_VALUE_SKU]];
+        $childSku = $this->getValue(ColumnKeys::BUNDLE_VALUE_SKU);
         $childId = $this->mapSkuToEntityId($childSku);
 
         // load the default values
         $selectionCanChangeQty = 1;
-        $selectionPriceType = $this->mapPriceType($row[$headers[ColumnKeys::BUNDLE_VALUE_PRICE_TYPE]]);
-        $selectionPriceValue = $row[$headers[ColumnKeys::BUNDLE_VALUE_PRICE]];
-        $selectionQty = $row[$headers[ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY]];
-        $isDefault = $row[$headers[ColumnKeys::BUNDLE_VALUE_DEFAULT]];
+        $selectionPriceType = $this->mapPriceType($this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE));
+        $selectionPriceValue = $this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE);
+        $selectionQty = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY);
+        $isDefault = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT);
 
         // laod the position counter
         $position = $this->raisePositionCounter();
 
         // prepare the product bundle selection data
-        $productBundleSelection = array(
-            $optionId,
-            $parentId,
-            $childId,
-            $position,
-            $isDefault,
-            $selectionPriceType,
-            $selectionPriceValue,
-            $selectionQty,
-            $selectionCanChangeQty
+        return $this->initializeEntity(
+            array(
+                MemberNames::OPTION_ID                => $optionId,
+                MemberNames::PARENT_PRODUCT_ID        => $parentId,
+                MemberNames::PRODUCT_ID               => $childId,
+                MemberNames::POSITION                 => $position,
+                MemberNames::IS_DEFAULT               => $isDefault,
+                MemberNames::SELECTION_PRICE_TYPE     => $selectionPriceType,
+                MemberNames::SELECTION_PRICE_VALUE    => $selectionPriceValue,
+                MemberNames::SELECTION_QTY            => $selectionQty,
+                MemberNames::SELECTION_CAN_CHANGE_QTY => $selectionCanChangeQty
+            )
         );
+    }
 
-        // persist the product bundle selection data
-        $this->addChildSkuSelectionIdMapping($childSku, $this->persistProductBundleSelection($productBundleSelection));
-
-        // returns the row
-        return $row;
+    /**
+     * Initialize the bundle selection with the passed attributes and returns an instance.
+     *
+     * @param array $attr The bundle selection attributes
+     *
+     * @return array The initialized bundle selection
+     */
+    protected function initializeBundleSelection(array $attr)
+    {
+        return $attr;
     }
 
     /**
@@ -106,7 +146,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      *
      * @return integer $optionId The last created option ID
      */
-    public function getLastOptionId()
+    protected function getLastOptionId()
     {
         return $this->getSubject()->getLastOptionId();
     }
@@ -119,7 +159,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function addChildSkuSelectionIdMapping($childSku, $selectionId)
+    protected function addChildSkuSelectionIdMapping($childSku, $selectionId)
     {
         $this->getSubject()->addChildSkuSelectionIdMapping($childSku, $selectionId);
     }
@@ -129,7 +169,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      *
      * @return integer The actual value of the position counter
      */
-    public function raisePositionCounter()
+    protected function raisePositionCounter()
     {
         return $this->getSubject()->raisePositionCounter();
     }
@@ -142,7 +182,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      * @return integer The option ID for the passed name
      * @throws \Exception Is thrown, if no option ID for the passed name is available
      */
-    public function getOptionIdForName($name)
+    protected function getOptionIdForName($name)
     {
         return $this->getSubject()-> getOptionIdForName($name);
     }
@@ -155,7 +195,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      * @return integer The mapped price type
      * @throws \Exception Is thrown, if the passed price type can't be mapped
      */
-    public function mapPriceType($priceType)
+    protected function mapPriceType($priceType)
     {
         return $this->getSubject()->mapPriceType($priceType);
     }
@@ -168,7 +208,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      * @return integer The mapped entity ID
      * @throws \Exception Is thrown if the SKU is not mapped yet
      */
-    public function mapSkuToEntityId($sku)
+    protected function mapSkuToEntityId($sku)
     {
         return $this->getSubject()->mapSkuToEntityId($sku);
     }
@@ -180,7 +220,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      *
      * @return string The ID of the persisted entity
      */
-    public function persistProductBundleSelection($productBundleSelection)
+    protected function persistProductBundleSelection($productBundleSelection)
     {
         return $this->getSubject()->persistProductBundleSelection($productBundleSelection);
     }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionCreateProcessor
+ * TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionUpdateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,11 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
+use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
+use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 
 /**
- * The product bundle selection create processor implementation.
+ * The product bundle selection update processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +32,7 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleSelectionCreateProcessor extends AbstractCreateProcessor
+class ProductBundleSelectionUpdateProcessor extends AbstractUpdateProcessor
 {
 
     /**
@@ -48,7 +49,7 @@ class ProductBundleSelectionCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION => $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION
+            $utilityClassName::UPDATE_PRODUCT_BUNDLE_SELECTION => $utilityClassName::UPDATE_PRODUCT_BUNDLE_SELECTION
         );
     }
 
@@ -63,6 +64,6 @@ class ProductBundleSelectionCreateProcessor extends AbstractCreateProcessor
     public function execute($row, $name = null)
     {
         parent::execute($row, $name);
-        return $this->getConnection()->lastInsertId();
+        return $row[MemberNames::SELECTION_ID];
     }
 }

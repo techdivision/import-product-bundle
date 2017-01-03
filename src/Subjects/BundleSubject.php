@@ -22,7 +22,6 @@ namespace TechDivision\Import\Product\Bundle\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Product\Subjects\AbstractProductSubject;
-use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
  * A SLSB that handles the process to import product variants.
@@ -268,6 +267,61 @@ class BundleSubject extends AbstractProductSubject
 
         // throw an exception, if not
         throw new \Exception(sprintf('Can\'t find option ID for name %s', $name));
+    }
+
+    /**
+     * Load's the bundle option with the passed name, store + parent ID.
+     *
+     * @param string  $title    The title of the bundle option to be returned
+     * @param integer $storeId  The store ID of the bundle option to be returned
+     * @param integer $parentId The entity of the product the bundle option is related with
+     *
+     * @return array The bundle option
+     */
+    public function loadBundleOption($title, $storeId, $parentId)
+    {
+        return $this->getProductProcessor()->loadBundleOption($title, $storeId, $parentId);
+    }
+
+    /**
+     * Load's the bundle option value with the passed name, store + parent ID.
+     *
+     * @param string  $title    The title of the bundle option value to be returned
+     * @param integer $storeId  The store ID of the bundle option value to be returned
+     * @param integer $parentId The entity of the product the bundle option value is related with
+     *
+     * @return array The bundle option
+     */
+    public function loadBundleOptionValue($title, $storeId, $parentId)
+    {
+        return $this->getProductProcessor()->loadBundleOptionValue($title, $storeId, $parentId);
+    }
+
+    /**
+     * Load's the bundle selection value with the passed option/product/parent product ID.
+     *
+     * @param integer $optionId        The option ID of the bundle selection to be returned
+     * @param integer $productId       The product ID of the bundle selection to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection to be returned
+     *
+     * @return array The bundle selection
+     */
+    public function loadBundleSelection($optionId, $productId, $parentProductId)
+    {
+        return $this->getProductProcessor()->loadBundleSelection($optionId, $productId, $parentProductId);
+    }
+
+    /**
+     * Load's the bundle selection price with the passed selection/website ID.
+     *
+     * @param integer $selectionId The selection ID of the bundle selection price to be returned
+     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     *
+     * @return array The bundle selection price
+     */
+    public function loadBundleSelectionPrice($selectionId, $websiteId)
+    {
+        return $this->getProductProcessor()->loadBundleSelectionPrice($selectionId, $websiteId);
     }
 
     /**

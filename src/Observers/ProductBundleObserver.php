@@ -141,7 +141,7 @@ class ProductBundleObserver extends AbstractProductImportObserver
      * @return void
      * @uses \TechDivision\Import\Product\Bundle\Subjects\BunchSubject::getLastEntityId()
      */
-    public function addArtefacts(array $artefacts)
+    protected function addArtefacts(array $artefacts)
     {
         $this->getSubject()->addArtefacts(ProductBundleObserver::ARTEFACT_TYPE, $artefacts);
     }
