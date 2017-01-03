@@ -99,7 +99,7 @@ class BundleOptionObserver extends AbstractProductImportObserver
         $this->resetPositionCounter();
 
         // load and map the parent option ID
-        $parentId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
 
         // extract the parent/child ID as well as type and position
         $required = $this->getValue(ColumnKeys::BUNDLE_VALUE_REQUIRED);
@@ -172,7 +172,7 @@ class BundleOptionObserver extends AbstractProductImportObserver
      * @return integer The mapped entity ID
      * @throws \Exception Is thrown if the SKU is not mapped yet
      */
-    protected function mapSkuToEntityId($sku)
+    protected function mapSku($sku)
     {
         return $this->getSubject()->mapSkuToEntityId($sku);
     }

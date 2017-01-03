@@ -46,7 +46,7 @@ class BundleOptionValueUpdateObserver extends BundleOptionValueObserver
     {
 
         // load and map the parent option ID
-        $parentId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
 
         // load the parent ID, the name and the store ID
         $name = $this->getValue(ColumnKeys::BUNDLE_VALUE_NAME);
@@ -83,7 +83,7 @@ class BundleOptionValueUpdateObserver extends BundleOptionValueObserver
      * @return integer The mapped entity ID
      * @throws \Exception Is thrown if the SKU is not mapped yet
      */
-    protected function mapSkuToEntityId($sku)
+    protected function mapSku($sku)
     {
         return $this->getSubject()->mapSkuToEntityId($sku);
     }
