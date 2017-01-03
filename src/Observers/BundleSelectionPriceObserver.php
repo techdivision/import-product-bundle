@@ -21,12 +21,12 @@
 namespace TechDivision\Import\Product\Bundle\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
-use TechDivision\Import\Product\Utils\MemberNames;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
+use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 
 /**
- * A SLSB that handles the process to import product bunches.
+ * Oberserver that provides functionality for the bundle selection price replace operation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -48,11 +48,47 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
+
+        // process the functionality and return the row
+        $this->process();
+
+        // return the processed row
+        return $this->getRow();
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return array The processed row
+     */
+    protected function process()
+    {
 
         // prepare the store view code
-        $this->prepareStoreViewCode($row);
+        $this->prepareStoreViewCode($this->getRow());
+
+        // load the store view code
+        $storeViewCode = $this->getStoreViewCode(StoreViewCodes::ADMIN);
+
+        // check if we're in default store
+        if (!$this->isDefaultStore($storeViewCode)) {
+            // prepare and initialize the bundle selection price
+            $productBundleSelectionPrice = $this->initializeBundleSelectionPrice($this->prepareAttributes());
+
+            // persist the bundle selection price
+            $this->persistProductBundleSelectionPrice($productBundleSelectionPrice);
+        }
+    }
+
+    /**
+     * Prepare the attributes of the entity that has to be persisted.
+     *
+     * @return array The prepared attributes
+     */
+    protected function prepareAttributes()
+    {
 
         // load the store view code
         $storeViewCode = $this->getStoreViewCode(StoreViewCodes::ADMIN);
@@ -62,28 +98,33 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
         $websiteId = $store[MemberNames::WEBSITE_ID];
 
         // load the default values
-        $selectionPriceType = $this->mapPriceType($row[$headers[ColumnKeys::BUNDLE_VALUE_PRICE_TYPE]]);
-        $selectionPriceValue = $row[$headers[ColumnKeys::BUNDLE_VALUE_PRICE]];
+        $selectionPriceType = $this->mapPriceType($this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE));
+        $selectionPriceValue = $this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE);
 
         // load the selection ID for the child SKU
-        $selectionId = $this->getChildSkuSelectionMapping($row[$headers[ColumnKeys::BUNDLE_VALUE_SKU]]);
+        $selectionId = $this->getChildSkuSelectionMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
 
-        // check if we're in default store
-        if (!$this->isDefaultStore($storeViewCode)) {
-            // prepare the website dependent bundle selection price
-            $productBundleSelectionPrice = array(
-                $selectionId,
-                $websiteId,
-                $selectionPriceType,
-                $selectionPriceValue
-            );
+        // return the prepared bundle selection price
+        return $this->initializeEntity(
+            array(
+                MemberNames::SELECTION_ID          => $selectionId,
+                MemberNames::WEBSITE_ID            => $websiteId,
+                MemberNames::SELECTION_PRICE_TYPE  => $selectionPriceType,
+                MemberNames::SELECTION_PRICE_VALUE => $selectionPriceValue
+            )
+        );
+    }
 
-            // persist the bundle selection price
-            $this->persistProductBundleSelectionPrice($productBundleSelectionPrice);
-        }
-
-        // returns the row
-        return $row;
+    /**
+     * Initialize the bundle selection price with the passed attributes and returns an instance.
+     *
+     * @param array $attr The bundle selection price attributes
+     *
+     * @return array The initialized bundle selection price
+     */
+    protected function initializeBundleSelectionPrice(array $attr)
+    {
+        return $attr;
     }
 
     /**
@@ -94,7 +135,7 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
      * @return integer The mapped price type
      * @throws \Exception Is thrown, if the passed price type can't be mapped
      */
-    public function mapPriceType($priceType)
+    protected function mapPriceType($priceType)
     {
         return $this->getSubject()->mapPriceType($priceType);
     }
@@ -106,7 +147,7 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
      *
      * @return integer The last created selection ID
      */
-    public function getChildSkuSelectionMapping($childSku)
+    protected function getChildSkuSelectionMapping($childSku)
     {
         return $this->getSubject()->getChildSkuSelectionMapping($childSku);
     }
@@ -118,7 +159,7 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
      *
      * @return boolean TRUE if the passed store view code is the default one, else FALSE
      */
-    public function isDefaultStore($storeViewCode)
+    protected function isDefaultStore($storeViewCode)
     {
         return StoreViewCodes::ADMIN === strtolower($storeViewCode);
     }
@@ -131,7 +172,7 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
      * @return array The requested store
      * @throws \Exception Is thrown, if the requested store is not available
      */
-    public function getStoreByStoreCode($storeCode)
+    protected function getStoreByStoreCode($storeCode)
     {
         return $this->getSubject()->getStoreByStoreCode($storeCode);
     }
@@ -143,7 +184,7 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
      *
      * @return void
      */
-    public function persistProductBundleSelectionPrice($productBundleSelectionPrice)
+    protected function persistProductBundleSelectionPrice($productBundleSelectionPrice)
     {
         $this->getSubject()->persistProductBundleSelectionPrice($productBundleSelectionPrice);
     }

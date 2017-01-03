@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionCreateProcessor
+ * TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionUpdateProcessor
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,11 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
+use TechDivision\Import\Product\Bundle\Utils\MemberNames;
+use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
- * The product bundle selection create processor implementation.
+ * The product bundle option update processor implementation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,7 +32,7 @@ use TechDivision\Import\Actions\Processors\AbstractCreateProcessor;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleSelectionCreateProcessor extends AbstractCreateProcessor
+class ProductBundleOptionUpdateProcessor extends AbstractUpdateProcessor
 {
 
     /**
@@ -48,21 +49,21 @@ class ProductBundleSelectionCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION => $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION
+            $utilityClassName::UPDATE_PRODUCT_BUNDLE_OPTION => $utilityClassName::UPDATE_PRODUCT_BUNDLE_OPTION
         );
     }
 
     /**
-     * Persist's the passed row.
+     * Update's the passed row.
      *
-     * @param array       $row  The row to persist
+     * @param array       $row  The row to update
      * @param string|null $name The name of the prepared statement that has to be executed
      *
-     * @return string The last inserted ID
+     * @return string The ID of the updated product
      */
     public function execute($row, $name = null)
     {
         parent::execute($row, $name);
-        return $this->getConnection()->lastInsertId();
+        return $row[MemberNames::OPTION_ID];
     }
 }

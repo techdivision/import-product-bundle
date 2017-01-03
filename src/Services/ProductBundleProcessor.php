@@ -75,6 +75,34 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     protected $productBundleSelectionPriceAction;
 
     /**
+     * The repository to load bundle option data.
+     *
+     * @var \TechDivision\Import\Product\Bundle\Respository\BundleOptionRepository
+     */
+    protected $bundleOptionRespository;
+
+    /**
+     * The repository to load bundle option value data.
+     *
+     * @var \TechDivision\Import\Product\Bundle\Respository\BundleOptionValueRepository
+     */
+    protected $bundleOptionValueRespository;
+
+    /**
+     * The repository to load bundle selection data.
+     *
+     * @var \TechDivision\Import\Product\Bundle\Respository\BundleSelectionRepository
+     */
+    protected $bundleSelectionRespository;
+
+    /**
+     * The repository to load bundle selection price data.
+     *
+     * @var \TechDivision\Import\Product\Bundle\Respository\BundleSelectionPriceRepository
+     */
+    protected $bundleSelectionPriceRespository;
+
+    /**
      * Set's the passed connection.
      *
      * @param \PDO $connection The connection to set
@@ -251,6 +279,94 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     }
 
     /**
+     * Set's the repository to load bundle option data.
+     *
+     * @param \TechDivision\Import\Product\Bundle\Repository\BundleOptionRespository $bundleOptionRespository The repository instance
+     *
+     * @return void
+     */
+    public function setBundleOptionRepository($bundleOptionRespository)
+    {
+        $this->bundleOptionRespository = $bundleOptionRespository;
+    }
+
+    /**
+     * Return's the respository to load bundle option data.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Repository\BundleOptionRespository The repository instance
+     */
+    public function getBundleOptionRepository()
+    {
+        return $this->bundleOptionRespository;
+    }
+
+    /**
+     * Set's the repository to load bundle option value data.
+     *
+     * @param \TechDivision\Import\Product\Bundle\Repository\BundleOptionValueRespository $bundleOptionValueRespository The repository instance
+     *
+     * @return void
+     */
+    public function setBundleOptionValueRepository($bundleOptionValueRespository)
+    {
+        $this->bundleOptionValueRespository = $bundleOptionValueRespository;
+    }
+
+    /**
+     * Return's the respository to load bundle option value data.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Repository\BundleOptionValueRespository The repository instance
+     */
+    public function getBundleOptionValueRepository()
+    {
+        return $this->bundleOptionValueRespository;
+    }
+
+    /**
+     * Set's the repository to load bundle selection data.
+     *
+     * @param \TechDivision\Import\Product\Bundle\Repository\BundleSelectionRespository $bundleSelectionRespository The repository instance
+     *
+     * @return void
+     */
+    public function setBundleSelectionRepository($bundleSelectionRespository)
+    {
+        $this->bundleSelectionRespository = $bundleSelectionRespository;
+    }
+
+    /**
+     * Return's the respository to load bundle selection data.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Repository\BundleSelectionRespository The repository instance
+     */
+    public function getBundleSelectionRepository()
+    {
+        return $this->bundleSelectionRespository;
+    }
+
+    /**
+     * Set's the repository to load bundle selection price data.
+     *
+     * @param \TechDivision\Import\Product\Bundle\Repository\BundleSelectionPriceRespository $bundleSelectionPriceRespository The repository instance
+     *
+     * @return void
+     */
+    public function setBundleSelectionPriceRepository($bundleSelectionPriceRespository)
+    {
+        $this->bundleSelectionPriceRespository = $bundleSelectionPriceRespository;
+    }
+
+    /**
+     * Return's the respository to load bundle selection price data.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Repository\BundleSelectionPriceRespository The repository instance
+     */
+    public function getBundleSelectionPriceRepository()
+    {
+        return $this->bundleSelectionPriceRespository;
+    }
+
+    /**
      * Return's the attribute option value with the passed value and store ID.
      *
      * @param mixed   $value   The option value
@@ -264,6 +380,61 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     }
 
     /**
+     * Load's the bundle option with the passed name, store + parent ID.
+     *
+     * @param string  $title    The title of the bundle option to be returned
+     * @param integer $storeId  The store ID of the bundle option to be returned
+     * @param integer $parentId The entity of the product the bundle option is related with
+     *
+     * @return array The bundle option
+     */
+    public function loadBundleOption($title, $storeId, $parentId)
+    {
+        return $this->getBundleOptionRepository()->findOneByNameAndStoreIdAndParentId($title, $storeId, $parentId);
+    }
+
+    /**
+     * Load's the bundle option value with the passed name, store + parent ID.
+     *
+     * @param string  $title    The title of the bundle option value to be returned
+     * @param integer $storeId  The store ID of the bundle option value to be returned
+     * @param integer $parentId The entity of the product the bundle option value is related with
+     *
+     * @return array The bundle option
+     */
+    public function loadBundleOptionValue($title, $storeId, $parentId)
+    {
+        return $this->getBundleOptionValueRepository()->findOneByNameAndStoreIdAndParentId($title, $storeId, $parentId);
+    }
+
+    /**
+     * Load's the bundle selection value with the passed option/product/parent product ID.
+     *
+     * @param integer $optionId        The option ID of the bundle selection to be returned
+     * @param integer $productId       The product ID of the bundle selection to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection to be returned
+     *
+     * @return array The bundle selection
+     */
+    public function loadBundleSelection($optionId, $productId, $parentProductId)
+    {
+        return $this->getBundleSelectionRepository()->findOneByOptionIdAndProductIdAndParentProductId($optionId, $productId, $parentProductId);
+    }
+
+    /**
+     * Load's the bundle selection price with the passed selection/website ID.
+     *
+     * @param integer $selectionId The selection ID of the bundle selection price to be returned
+     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     *
+     * @return array The bundle selection price
+     */
+    public function loadBundleSelectionPrice($selectionId, $websiteId)
+    {
+        return $this->getBundleSelectionPriceRepository()->findOneByOptionIdAndProductIdAndParentProductId($selectionId, $websiteId);
+    }
+
+    /**
      * Persist's the passed product bundle option data and return's the ID.
      *
      * @param array $productBundleOption The product bundle option data to persist
@@ -272,7 +443,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleOption($productBundleOption)
     {
-        return $this->getProductBundleOptionAction()->create($productBundleOption);
+        return $this->getProductBundleOptionAction()->persist($productBundleOption);
     }
 
     /**
@@ -284,7 +455,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleOptionValue($productBundleOptionValue)
     {
-        $this->getProductBundleOptionValueAction()->create($productBundleOptionValue);
+        $this->getProductBundleOptionValueAction()->persist($productBundleOptionValue);
     }
 
     /**
@@ -296,7 +467,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleSelection($productBundleSelection)
     {
-        return $this->getProductBundleSelectionAction()->create($productBundleSelection);
+        return $this->getProductBundleSelectionAction()->persist($productBundleSelection);
     }
 
     /**
@@ -308,6 +479,6 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      */
     public function persistProductBundleSelectionPrice($productBundleSelectionPrice)
     {
-        return $this->getProductBundleSelectionPriceAction()->create($productBundleSelectionPrice);
+        return $this->getProductBundleSelectionPriceAction()->persist($productBundleSelectionPrice);
     }
 }

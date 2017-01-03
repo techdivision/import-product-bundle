@@ -51,18 +51,4 @@ class ProductBundleSelectionPriceCreateProcessor extends AbstractCreateProcessor
             $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE => $utilityClassName::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE
         );
     }
-
-    /**
-     * Persist's the passed row.
-     *
-     * @param array       $row  The row to persist
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The last inserted ID
-     */
-    public function execute($row, $name = null)
-    {
-        $this->getPreparedStatement($name)->execute($row);
-        return $this->getConnection()->lastInsertId();
-    }
 }
