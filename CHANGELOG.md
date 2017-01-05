@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha6
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Refactoring ProductBundleObserver for generalization purposes
+
 # Version 1.0.0-alpha5
 
 ## Bugfixes

@@ -69,43 +69,48 @@ class ProductBundleObserver extends AbstractProductImportObserver
     public function handle(array $row)
     {
 
-        // load the header information
-        $headers = $this->getHeaders();
+        // initialize the row
+        $this->setRow($row);
 
-        // query whether or not the product type is set
-        if (!isset($headers[ColumnKeys::PRODUCT_TYPE])) {
-            return $row;
-        }
+        // process the functionality and return the row
+        $this->process();
+
+        // return the processed row
+        return $this->getRow();
+    }
+
+    /**
+     * Process the observer's business logic.
+     *
+     * @return array The processed row
+     */
+    protected function process()
+    {
 
         // query whether or not we've found a bundle product
-        if ($row[$headers[ColumnKeys::PRODUCT_TYPE]] !== ProductTypes::BUNDLE) {
-            return $row;
-        }
-
-        // query whether or not, we've a bundle configuration
-        if (!isset($row[$headers[ColumnKeys::BUNDLE_VALUES]])) {
-            return $row;
+        if ($this->getValue(ColumnKeys::PRODUCT_TYPE) !== ProductTypes::BUNDLE) {
+            return;
         }
 
         // query whether or not, we've a bundle
-        if ($bundleValues = $row[$headers[ColumnKeys::BUNDLE_VALUES]]) {
+        if ($bundleValues = $this->getValue(ColumnKeys::BUNDLE_VALUES)) {
             // initialize the array for the product bundles
             $artefacts = array();
 
             // load the parent SKU from the row
-            $parentSku = $row[$headers[ColumnKeys::SKU]];
+            $parentSku = $this->getValue(ColumnKeys::SKU);
 
             // initialize the bundle with the found values
-            foreach (explode('|', $bundleValues) as $bundleValue) {
+            foreach ($this->explode($bundleValues, '|') as $bundleValue) {
                 // initialize the product bundle itself
                 $bundle = array(
                     ColumnKeys::BUNDLE_PARENT_SKU    => $parentSku,
-                    ColumnKeys::STORE_VIEW_CODE      => $row[$headers[ColumnKeys::STORE_VIEW_CODE]],
-                    ColumnKeys::BUNDLE_SKU_TYPE      => $row[$headers[ColumnKeys::BUNDLE_SKU_TYPE]],
-                    ColumnKeys::BUNDLE_PRICE_TYPE    => $row[$headers[ColumnKeys::BUNDLE_PRICE_TYPE]],
-                    ColumnKeys::BUNDLE_PRICE_VIEW    => $row[$headers[ColumnKeys::BUNDLE_PRICE_VIEW]],
-                    ColumnKeys::BUNDLE_WEIGHT_TYPE   => $row[$headers[ColumnKeys::BUNDLE_WEIGHT_TYPE]],
-                    ColumnKeys::BUNDLE_SHIPMENT_TYPE => $row[$headers[ColumnKeys::BUNDLE_SHIPMENT_TYPE]],
+                    ColumnKeys::STORE_VIEW_CODE      => $this->getValue(ColumnKeys::STORE_VIEW_CODE),
+                    ColumnKeys::BUNDLE_SKU_TYPE      => $this->getValue(ColumnKeys::BUNDLE_SKU_TYPE),
+                    ColumnKeys::BUNDLE_PRICE_TYPE    => $this->getValue(ColumnKeys::BUNDLE_PRICE_TYPE),
+                    ColumnKeys::BUNDLE_PRICE_VIEW    => $this->getValue(ColumnKeys::BUNDLE_PRICE_VIEW),
+                    ColumnKeys::BUNDLE_WEIGHT_TYPE   => $this->getValue(ColumnKeys::BUNDLE_WEIGHT_TYPE),
+                    ColumnKeys::BUNDLE_SHIPMENT_TYPE => $this->getValue(ColumnKeys::BUNDLE_SHIPMENT_TYPE),
                 );
 
                 // initialize the columns
@@ -127,9 +132,6 @@ class ProductBundleObserver extends AbstractProductImportObserver
             // append the bundles to the subject
             $this->addArtefacts($artefacts);
         }
-
-        // returns the row
-        return $row;
     }
 
     /**
