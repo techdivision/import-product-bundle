@@ -1,3 +1,13 @@
+# Version 1.0.0-alpha7
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add BundleShipmentTypeCallback and ShipmentTypes utility class
+
 # Version 1.0.0-alpha6
 
 ## Bugfixes
