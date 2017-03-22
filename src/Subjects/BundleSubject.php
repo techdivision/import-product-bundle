@@ -148,10 +148,22 @@ class BundleSubject extends AbstractProductSubject
      * @param string $childSku The child SKU to return the selection ID for
      *
      * @return integer The last created selection ID
+     * @throws \Exception Is thrown if the SKU is not mapped yet
      */
     public function getChildSkuSelectionMapping($childSku)
     {
-        return $this->childSkuSelectionIdMapping[$childSku];
+
+        // query whether or not a child SKU selection ID mapping is available
+        if (isset($this->childSkuSelectionIdMapping[$childSku])) {
+            return $this->childSkuSelectionIdMapping[$childSku];
+        }
+
+        // throw an exception if the SKU has not been mapped yet
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found not mapped selection ID mapping for SKU %s', $childSku)
+            )
+        );
     }
 
     /**
@@ -171,7 +183,11 @@ class BundleSubject extends AbstractProductSubject
         }
 
         // throw an exception if the SKU has not been mapped yet
-        throw new \Exception(sprintf('Found not mapped SKU %s', $sku));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found not mapped entity ID mapping for SKU %s', $sku)
+            )
+        );
     }
 
     /**
@@ -191,7 +207,11 @@ class BundleSubject extends AbstractProductSubject
         }
 
         // throw an exception, if not
-        throw new \Exception(sprintf('Can\'t find price type %s', $priceType));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t find mapping for price type %s', $priceType)
+            )
+        );
     }
 
     /**
@@ -211,7 +231,35 @@ class BundleSubject extends AbstractProductSubject
         }
 
         // throw an exception, if not
-        throw new \Exception(sprintf('Found invalid store code %s', $storeCode));
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Found invalid store code %s', $storeCode)
+            )
+        );
+    }
+
+    /**
+     * Return's the option ID for the passed name.
+     *
+     * @param string $name The name to return the option ID for
+     *
+     * @return integer The option ID for the passed name
+     * @throws \Exception Is thrown, if no option ID for the passed name is available
+     */
+    public function getOptionIdForName($name)
+    {
+
+        // query whether or not an option ID for the passed name is available
+        if (isset($this->nameOptionIdMapping[$name])) {
+            return $this->nameOptionIdMapping[$name];
+        }
+
+        // throw an exception, if not
+        throw new \Exception(
+            $this->appendExceptionSuffix(
+                sprintf('Can\'t find option ID for name %s', $name)
+            )
+        );
     }
 
     /**
@@ -247,26 +295,6 @@ class BundleSubject extends AbstractProductSubject
     public function getLastOptionId()
     {
         return end($this->nameOptionIdMapping);
-    }
-
-    /**
-     * Return's the option ID for the passed name.
-     *
-     * @param string $name The name to return the option ID for
-     *
-     * @return integer The option ID for the passed name
-     * @throws \Exception Is thrown, if no option ID for the passed name is available
-     */
-    public function getOptionIdForName($name)
-    {
-
-        // query whether or not an option ID for the passed name is available
-        if (isset($this->nameOptionIdMapping[$name])) {
-            return $this->nameOptionIdMapping[$name];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(sprintf('Can\'t find option ID for name %s', $name));
     }
 
     /**

@@ -77,8 +77,12 @@ class BundleOptionObserver extends AbstractProductImportObserver
         // reset the position counter for the bundle selection
         $this->resetPositionCounter();
 
-        // load and map the parent option ID
-        $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        try {
+            // load and map the parent SKU
+            $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        } catch (\Exception $e) {
+            throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
+        }
 
         // extract the parent/child ID as well as type and position
         $required = $this->getValue(ColumnKeys::BUNDLE_VALUE_REQUIRED);

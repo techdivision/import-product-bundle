@@ -44,11 +44,19 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
     protected function initializeBundleSelection(array $attr)
     {
 
-        // load the product bundle option SKU/ID
-        $parentProductId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        try {
+            // try to load the product bundle option SKU/ID
+            $parentProductId= $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        } catch (\Exception $e) {
+            throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
+        }
 
-        // load the product ID
-        $productId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
+        try {
+            // try to load the product ID
+            $productId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
+        } catch (\Exception $e) {
+            throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
+        }
 
         // load the actual option ID
         $optionId = $this->getLastOptionId();
