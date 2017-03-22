@@ -47,13 +47,14 @@ class BundleTypeCallback extends AbstractProductImportCallback
     /**
      * Will be invoked by a observer it has been registered for.
      *
-     * @param mixed $value The value to handle
+     * @param string $attributeCode  The code of the attribute the passed value is for
+     * @param mixed  $attributeValue The value to handle
      *
-     * @return mixed The modified value
-     * @see \TechDivision\Import\Product\Callbacks\ProductImportCallbackInterface::handle()
+     * @return mixed|null The modified value
+     * @see \TechDivision\Import\Callbacks\CallbackInterface::handle()
      */
-    public function handle($value)
+    public function handle($attributeCode, $attributeValue)
     {
-        return (boolean) $this->types[strtolower($value)];
+        return (boolean) $this->types[strtolower($attributeValue)];
     }
 }

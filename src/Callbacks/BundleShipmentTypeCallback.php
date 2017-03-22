@@ -48,16 +48,17 @@ class BundleShipmentTypeCallback extends AbstractProductImportCallback
     /**
      * Will be invoked by a observer it has been registered for.
      *
-     * @param mixed $value The value to handle
+     * @param string $attributeCode  The code of the attribute the passed value is for
+     * @param mixed  $attributeValue The value to handle
      *
-     * @return mixed The modified value
-     * @see \TechDivision\Import\Product\Callbacks\ProductImportCallbackInterface::handle()
+     * @return mixed|null The modified value
+     * @see \TechDivision\Import\Callbacks\CallbackInterface::handle()
      */
-    public function handle($value)
+    public function handle($attributeCode, $attributeValue)
     {
 
         // query whether or not, the requested shipment type is available
-        if (isset($this->availableShipmentTypes[$value = strtolower($value)])) {
+        if (isset($this->availableShipmentTypes[$value = strtolower($attributeValue)])) {
             return $this->availableShipmentTypes[$value];
         }
 

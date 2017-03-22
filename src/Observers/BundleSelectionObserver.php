@@ -78,13 +78,22 @@ class BundleSelectionObserver extends AbstractProductImportObserver
         // load the actual option ID
         $optionId = $this->getLastOptionId();
 
-        // load the child ID
-        $childSku = $this->getValue(ColumnKeys::BUNDLE_VALUE_SKU);
-        $childId = $this->mapSkuToEntityId($childSku);
+        try {
+            // try to load the child ID
+            $childId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
+        } catch (\Exception $e) {
+            throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_SKU), $e);
+        }
+
+        try {
+            // try to load the selection price type
+            $selectionPriceType = $this->mapPriceType($this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE));
+        } catch (\Exception $e) {
+            throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE), $e);
+        }
 
         // load the default values
         $selectionCanChangeQty = 1;
-        $selectionPriceType = $this->mapPriceType($this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE));
         $selectionPriceValue = $this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE);
         $selectionQty = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY);
         $isDefault = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT);

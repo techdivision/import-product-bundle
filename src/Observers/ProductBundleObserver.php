@@ -82,14 +82,33 @@ class ProductBundleObserver extends AbstractProductImportObserver
             // initialize the bundle with the found values
             foreach ($this->explode($bundleValues, '|') as $bundleValue) {
                 // initialize the product bundle itself
-                $bundle = array(
-                    ColumnKeys::BUNDLE_PARENT_SKU    => $parentSku,
-                    ColumnKeys::STORE_VIEW_CODE      => $this->getValue(ColumnKeys::STORE_VIEW_CODE),
-                    ColumnKeys::BUNDLE_SKU_TYPE      => $this->getValue(ColumnKeys::BUNDLE_SKU_TYPE),
-                    ColumnKeys::BUNDLE_PRICE_TYPE    => $this->getValue(ColumnKeys::BUNDLE_PRICE_TYPE),
-                    ColumnKeys::BUNDLE_PRICE_VIEW    => $this->getValue(ColumnKeys::BUNDLE_PRICE_VIEW),
-                    ColumnKeys::BUNDLE_WEIGHT_TYPE   => $this->getValue(ColumnKeys::BUNDLE_WEIGHT_TYPE),
-                    ColumnKeys::BUNDLE_SHIPMENT_TYPE => $this->getValue(ColumnKeys::BUNDLE_SHIPMENT_TYPE),
+                $bundle = $this->newArtefact(
+                    array(
+                        ColumnKeys::BUNDLE_PARENT_SKU    => $parentSku,
+                        ColumnKeys::STORE_VIEW_CODE      => $this->getValue(ColumnKeys::STORE_VIEW_CODE),
+                        ColumnKeys::BUNDLE_SKU_TYPE      => $this->getValue(ColumnKeys::BUNDLE_SKU_TYPE),
+                        ColumnKeys::BUNDLE_PRICE_TYPE    => $this->getValue(ColumnKeys::BUNDLE_PRICE_TYPE),
+                        ColumnKeys::BUNDLE_PRICE_VIEW    => $this->getValue(ColumnKeys::BUNDLE_PRICE_VIEW),
+                        ColumnKeys::BUNDLE_WEIGHT_TYPE   => $this->getValue(ColumnKeys::BUNDLE_WEIGHT_TYPE),
+                        ColumnKeys::BUNDLE_SHIPMENT_TYPE => $this->getValue(ColumnKeys::BUNDLE_SHIPMENT_TYPE),
+                    ),
+                    array(
+                        ColumnKeys::BUNDLE_PARENT_SKU        => ColumnKeys::SKU,
+                        ColumnKeys::STORE_VIEW_CODE          => ColumnKeys::STORE_VIEW_CODE,
+                        ColumnKeys::BUNDLE_SKU_TYPE          => ColumnKeys::BUNDLE_SKU_TYPE,
+                        ColumnKeys::BUNDLE_PRICE_TYPE        => ColumnKeys::BUNDLE_PRICE_TYPE,
+                        ColumnKeys::BUNDLE_PRICE_VIEW        => ColumnKeys::BUNDLE_PRICE_VIEW,
+                        ColumnKeys::BUNDLE_WEIGHT_TYPE       => ColumnKeys::BUNDLE_WEIGHT_TYPE,
+                        ColumnKeys::BUNDLE_SHIPMENT_TYPE     => ColumnKeys::BUNDLE_SHIPMENT_TYPE,
+                        ColumnKeys::BUNDLE_VALUE_NAME        => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_TYPE        => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_REQUIRED    => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_SKU         => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_PRICE       => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_DEFAULT     => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY => ColumnKeys::BUNDLE_VALUES,
+                        ColumnKeys::BUNDLE_VALUE_PRICE_TYPE  => ColumnKeys::BUNDLE_VALUES
+                    )
                 );
 
                 // initialize the columns
@@ -111,6 +130,19 @@ class ProductBundleObserver extends AbstractProductImportObserver
             // append the bundles to the subject
             $this->addArtefacts($artefacts);
         }
+    }
+
+    /**
+     * Create's and return's a new empty artefact entity.
+     *
+     * @param array $columns             The array with the column data
+     * @param array $originalColumnNames The array with a mapping from the old to the new column names
+     *
+     * @return array The new artefact entity
+     */
+    protected function newArtefact(array $columns, array $originalColumnNames)
+    {
+        return $this->getSubject()->newArtefact($columns, $originalColumnNames);
     }
 
     /**
