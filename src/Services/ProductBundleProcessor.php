@@ -20,6 +20,15 @@
 
 namespace TechDivision\Import\Product\Bundle\Services;
 
+use TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository;
+use TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository;
+use TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository;
+use TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository;
+use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction;
+use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction;
+use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction;
+use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction;
+
 /**
  * A SLSB providing methods to load product data using a PDO connection.
  *
@@ -38,13 +47,6 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      * @var \PDO
      */
     protected $connection;
-
-    /**
-     * The repository to access EAV attribute option values.
-     *
-     * @var \TechDivision\Import\Repositories\EavAttributeOptionValueRepository
-     */
-    protected $eavAttributeOptionValueRepository;
 
     /**
      * The action for product bundle option CRUD methods.
@@ -101,6 +103,41 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      * @var \TechDivision\Import\Product\Bundle\Respository\BundleSelectionPriceRepository
      */
     protected $bundleSelectionPriceRespository;
+
+    /**
+     * Initialize the processor with the necessary assembler and repository instances.
+     *
+     * @param \PDO                                                                           $connection                        The PDO connection to use
+     * @param \TechDivision\Import\Product\Bundle\Respository\BundleOptionRepository         $bundleOptionRepository            The bundle option repository to use
+     * @param \TechDivision\Import\Product\Bundle\Respository\BundleOptionValueRepository    $bundleOptionValueRepository       The bundle option value repository to use
+     * @param \TechDivision\Import\Product\Bundle\Respository\BundleSelectionRepository      $bundleSelectionRepository         The bundle selection repository to use
+     * @param \TechDivision\Import\Product\Bundle\Respository\BundleSelectionPriceRepository $bundleSelectionPriceRepository    The bundle selection price repository to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction          $productBundleOptionAction         The product bundle option action to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction     $productBundleOptionValueAction    The product bundle option value action to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction       $productBundleSelectionAction      The product bundle selection action to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction  $productBundleSelectionPriceAction The product bundle selection price action to use
+     */
+    public function __construct(
+        \PDO $connection,
+        BundleOptionRepository $bundleOptionRepository,
+        BundleOptionValueRepository $bundleOptionValueRepository,
+        BundleSelectionRepository $bundleSelectionRepository,
+        BundleSelectionPriceRepository $bundleSelectionPriceRepository,
+        ProductBundleOptionAction $productBundleOptionAction,
+        ProductBundleOptionValueAction $productBundleOptionValueAction,
+        ProductBundleSelectionAction $productBundleSelectionAction,
+        ProductBundleSelectionPriceAction $productBundleSelectionPriceAction
+    ) {
+        $this->setConnection($connection);
+        $this->setBundleOptionRepository($bundleOptionRepository);
+        $this->setBundleOptionValueRepository($bundleOptionValueRepository);
+        $this->setBundleSelectionRepository($bundleSelectionRepository);
+        $this->setBundleSelectionPriceRepository($bundleSelectionPriceRepository);
+        $this->setProductBundleOptionAction($productBundleOptionAction);
+        $this->setProductBundleOptionValueAction($productBundleOptionValueAction);
+        $this->setProductBundleSelectionAction($productBundleSelectionAction);
+        $this->setProductBundleSelectionPriceAction($productBundleSelectionPriceAction);
+    }
 
     /**
      * Set's the passed connection.
@@ -166,28 +203,6 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     public function rollBack()
     {
         return $this->connection->rollBack();
-    }
-
-    /**
-     * Set's the repository to access EAV attribute option values.
-     *
-     * @param \TechDivision\Import\Repositories\EavAttributeOptionValueRepository $eavAttributeOptionValueRepository The repository to access EAV attribute option values
-     *
-     * @return void
-     */
-    public function setEavAttributeOptionValueRepository($eavAttributeOptionValueRepository)
-    {
-        $this->eavAttributeOptionValueRepository = $eavAttributeOptionValueRepository;
-    }
-
-    /**
-     * Return's the repository to access EAV attribute option values.
-     *
-     * @return \TechDivision\Import\Repositories\EavAttributeOptionValueRepository The repository instance
-     */
-    public function getEavAttributeOptionValueRepository()
-    {
-        return $this->eavAttributeOptionValueRepository;
     }
 
     /**
@@ -364,19 +379,6 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     public function getBundleSelectionPriceRepository()
     {
         return $this->bundleSelectionPriceRespository;
-    }
-
-    /**
-     * Return's the attribute option value with the passed value and store ID.
-     *
-     * @param mixed   $value   The option value
-     * @param integer $storeId The ID of the store
-     *
-     * @return array|boolean The attribute option value instance
-     */
-    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId)
-    {
-        return $this->getEavAttributeOptionValueRepository()->findEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
     }
 
     /**

@@ -77,16 +77,6 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
     public function getBundleOptionValueRepository();
 
     /**
-     * Return's the attribute option value with the passed value and store ID.
-     *
-     * @param mixed   $value   The option value
-     * @param integer $storeId The ID of the store
-     *
-     * @return array|boolean The attribute option value instance
-     */
-    public function getEavAttributeOptionValueByOptionValueAndStoreId($value, $storeId);
-
-    /**
      * Load's the bundle option with the passed name, store + parent ID.
      *
      * @param string  $title    The title of the bundle option to be returned
