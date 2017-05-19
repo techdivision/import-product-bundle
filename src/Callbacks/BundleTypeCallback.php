@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Bundle\Callbacks;
 
 use TechDivision\Import\Product\Callbacks\AbstractProductImportCallback;
+use TechDivision\Import\Observers\AttributeCodeAndValueAwareObserverInterface;
 
 /**
  * A SLSB that handles the process to import product bunches.
@@ -47,14 +48,17 @@ class BundleTypeCallback extends AbstractProductImportCallback
     /**
      * Will be invoked by a observer it has been registered for.
      *
-     * @param string $attributeCode  The code of the attribute the passed value is for
-     * @param mixed  $attributeValue The value to handle
+     * @param \TechDivision\Import\Observers\ObserverInterface $observer The observer
      *
-     * @return mixed|null The modified value
-     * @see \TechDivision\Import\Callbacks\CallbackInterface::handle()
+     * @return mixed The modified value
      */
-    public function handle($attributeCode, $attributeValue)
+    public function handle(AttributeCodeAndValueAwareObserverInterface $observer)
     {
-        return (boolean) $this->types[strtolower($attributeValue)];
+
+        // set the observer
+        $this->setObserver($observer);
+
+        // replace the passed attribute value into the type ID
+        return (boolean) $this->types[strtolower($observer->getAttributeValue())];
     }
 }
