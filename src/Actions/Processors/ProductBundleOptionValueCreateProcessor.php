@@ -48,7 +48,7 @@ class ProductBundleOptionValueCreateProcessor extends AbstractCreateProcessor
 
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::CREATE_PRODUCT_BUNDLE_OPTION_VALUE => $utilityClassName::CREATE_PRODUCT_BUNDLE_OPTION_VALUE
+            $utilityClassName::CREATE_PRODUCT_BUNDLE_OPTION_VALUE => $this->getUtilityClass()->find($utilityClassName::CREATE_PRODUCT_BUNDLE_OPTION_VALUE)
         );
     }
 }

@@ -54,7 +54,8 @@ class BundleSelectionRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->bundleSelectionStmt = $this->getConnection()->prepare($utilityClassName::BUNDLE_SELECTION);
+        $this->bundleSelectionStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::BUNDLE_SELECTION));
     }
 
     /**
