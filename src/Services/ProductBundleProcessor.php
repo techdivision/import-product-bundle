@@ -20,6 +20,7 @@
 
 namespace TechDivision\Import\Product\Bundle\Services;
 
+use TechDivision\Import\Connection\ConnectionInterface;
 use TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository;
 use TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository;
 use TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository;
@@ -44,7 +45,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \PDO
+     * @var \TechDivision\Import\Connection\ConnectionInterface
      */
     protected $connection;
 
@@ -107,7 +108,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \PDO                                                                           $connection                        The PDO connection to use
+     * @param \TechDivision\Import\Connection\ConnectionInterface                            $connection                        The connection to use
      * @param \TechDivision\Import\Product\Bundle\Respository\BundleOptionRepository         $bundleOptionRepository            The bundle option repository to use
      * @param \TechDivision\Import\Product\Bundle\Respository\BundleOptionValueRepository    $bundleOptionValueRepository       The bundle option value repository to use
      * @param \TechDivision\Import\Product\Bundle\Respository\BundleSelectionRepository      $bundleSelectionRepository         The bundle selection repository to use
@@ -118,7 +119,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction  $productBundleSelectionPriceAction The product bundle selection price action to use
      */
     public function __construct(
-        \PDO $connection,
+        ConnectionInterface $connection,
         BundleOptionRepository $bundleOptionRepository,
         BundleOptionValueRepository $bundleOptionValueRepository,
         BundleSelectionRepository $bundleSelectionRepository,
@@ -142,11 +143,11 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \PDO $connection The connection to set
+     * @param \TechDivision\Import\Connection\ConnectionInterface $connection The connection to set
      *
      * @return void
      */
-    public function setConnection(\PDO $connection)
+    public function setConnection(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
@@ -154,7 +155,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \PDO The connection instance
+     * @return \TechDivision\Import\Connection\ConnectionInterface The connection instance
      */
     public function getConnection()
     {

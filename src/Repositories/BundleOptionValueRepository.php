@@ -54,7 +54,8 @@ class BundleOptionValueRepository extends AbstractRepository
         $utilityClassName = $this->getUtilityClassName();
 
         // initialize the prepared statements
-        $this->bundleOptionValueStmt = $this->getConnection()->prepare($utilityClassName::BUNDLE_OPTION_VALUE);
+        $this->bundleOptionValueStmt =
+            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::BUNDLE_OPTION_VALUE));
     }
 
     /**
