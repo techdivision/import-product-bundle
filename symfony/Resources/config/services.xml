@@ -95,10 +95,7 @@
         <service id="import_product_bundle.observer.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionUpdateObserver"/>
         <service id="import_product_bundle.observer.product.bundle" class="TechDivision\Import\Product\Bundle\Observers\ProductBundleObserver"/>
 
-        <service id="configuration.import_product_bundle.subject.bundle" synthetic="true" />
-
         <service id="import_product_bundle.subject.bundle" class="TechDivision\Import\Product\Bundle\Subjects\BundleSubject" shared="false">
-            <argument type="service" id="configuration.import_product_bundle.subject.bundle"/>
             <argument type="service" id="import.processor.registry"/>
             <argument type="service" id="import.generator.core.config.data.uid"/>
             <argument type="service" id="loggers"/>
