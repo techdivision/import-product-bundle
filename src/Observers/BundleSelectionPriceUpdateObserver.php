@@ -75,6 +75,6 @@ class BundleSelectionPriceUpdateObserver extends BundleSelectionPriceObserver
      */
     protected function loadBundleSelectionPrice($selectionId, $websiteId)
     {
-        return $this->getSubject()->loadBundleSelectionPrice($selectionId, $websiteId);
+        return $this->getProductBundleProcessor()->loadBundleSelectionPrice($selectionId, $websiteId);
     }
 }

@@ -81,6 +81,6 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
      */
     protected function loadBundleSelection($optionId, $productId, $parentProductId)
     {
-        return $this->getSubject()->loadBundleSelection($optionId, $productId, $parentProductId);
+        return $this->getProductBundleProcessor()->loadBundleSelection($optionId, $productId, $parentProductId);
     }
 }

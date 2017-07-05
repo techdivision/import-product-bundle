@@ -24,6 +24,7 @@ use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
  * Oberserver that provides functionality for the bundle selection price replace operation.
@@ -36,6 +37,33 @@ use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
  */
 class BundleSelectionPriceObserver extends AbstractProductImportObserver
 {
+
+    /**
+     * The product bundle processor instance.
+     *
+     * @var \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface
+     */
+    protected $productBundleProcessor;
+
+    /**
+     * Initialize the observer with the passed product bundle processor instance.
+     *
+     * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productBundleProcessor The product bundle processor instance
+     */
+    public function __construct(ProductBundleProcessorInterface $productBundleProcessor)
+    {
+        $this->productBundleProcessor = $productBundleProcessor;
+    }
+
+    /**
+     * Return's the product bundle processor instance.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface The product bundle processor instance
+     */
+    protected function getProductBundleProcessor()
+    {
+        return $this->productBundleProcessor;
+    }
 
     /**
      * Process the observer's business logic.
@@ -175,6 +203,6 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
      */
     protected function persistProductBundleSelectionPrice($productBundleSelectionPrice)
     {
-        $this->getSubject()->persistProductBundleSelectionPrice($productBundleSelectionPrice);
+        $this->getProductBundleProcessor()->persistProductBundleSelectionPrice($productBundleSelectionPrice);
     }
 }
