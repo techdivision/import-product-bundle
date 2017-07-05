@@ -72,7 +72,7 @@ class BundleOptionValueUpdateObserver extends BundleOptionValueObserver
      */
     protected function loadBundleOptionValue($title, $storeId, $parentId)
     {
-        return $this->getSubject()->loadBundleOptionValue($title, $storeId, $parentId);
+        return $this->getProductBundleProcessor()->loadBundleOptionValue($title, $storeId, $parentId);
     }
 
     /**
