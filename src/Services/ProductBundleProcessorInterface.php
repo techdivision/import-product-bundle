@@ -65,16 +65,30 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
     /**
      * Return's the respository to load bundle option data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repository\BundleOptionRespository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository The repository instance
      */
     public function getBundleOptionRepository();
 
     /**
      * Return's the respository to load bundle option value data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repository\BundleOptionValueRespository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository The repository instance
      */
     public function getBundleOptionValueRepository();
+
+    /**
+     * Return's the respository to load bundle selection data.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository The repository instance
+     */
+    public function getBundleSelectionRepository();
+
+    /**
+     * Return's the respository to load bundle selection price data.
+     *
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository The repository instance
+     */
+    public function getBundleSelectionPriceRepository();
 
     /**
      * Load's the bundle option with the passed name, store + parent ID.
@@ -110,6 +124,16 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
     public function loadBundleSelection($optionId, $productId, $parentProductId);
 
     /**
+     * Load's the bundle selection price with the passed selection/website ID.
+     *
+     * @param integer $selectionId The selection ID of the bundle selection price to be returned
+     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     *
+     * @return array The bundle selection price
+     */
+    public function loadBundleSelectionPrice($selectionId, $websiteId);
+
+    /**
      * Persist's the passed product bundle option data and return's the ID.
      *
      * @param array $productBundleOption The product bundle option data to persist
@@ -135,4 +159,13 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
      * @return string The ID of the persisted entity
      */
     public function persistProductBundleSelection($productBundleSelection);
+
+    /**
+     * Persist's the passed product bundle selection price data and return's the ID.
+     *
+     * @param array $productBundleSelectionPrice The product bundle selection price data to persist
+     *
+     * @return void
+     */
+    public function persistProductBundleSelectionPrice($productBundleSelectionPrice);
 }
