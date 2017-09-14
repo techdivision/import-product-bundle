@@ -80,43 +80,43 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * The repository to load bundle option data.
      *
-     * @var \TechDivision\Import\Product\Bundle\Respository\BundleOptionRepository
+     * @var \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository
      */
     protected $bundleOptionRespository;
 
     /**
      * The repository to load bundle option value data.
      *
-     * @var \TechDivision\Import\Product\Bundle\Respository\BundleOptionValueRepository
+     * @var \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository
      */
     protected $bundleOptionValueRespository;
 
     /**
      * The repository to load bundle selection data.
      *
-     * @var \TechDivision\Import\Product\Bundle\Respository\BundleSelectionRepository
+     * @var \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository
      */
     protected $bundleSelectionRespository;
 
     /**
      * The repository to load bundle selection price data.
      *
-     * @var \TechDivision\Import\Product\Bundle\Respository\BundleSelectionPriceRepository
+     * @var \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository
      */
     protected $bundleSelectionPriceRespository;
 
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                            $connection                        The connection to use
-     * @param \TechDivision\Import\Product\Bundle\Respository\BundleOptionRepository         $bundleOptionRepository            The bundle option repository to use
-     * @param \TechDivision\Import\Product\Bundle\Respository\BundleOptionValueRepository    $bundleOptionValueRepository       The bundle option value repository to use
-     * @param \TechDivision\Import\Product\Bundle\Respository\BundleSelectionRepository      $bundleSelectionRepository         The bundle selection repository to use
-     * @param \TechDivision\Import\Product\Bundle\Respository\BundleSelectionPriceRepository $bundleSelectionPriceRepository    The bundle selection price repository to use
-     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction          $productBundleOptionAction         The product bundle option action to use
-     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction     $productBundleOptionValueAction    The product bundle option value action to use
-     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction       $productBundleSelectionAction      The product bundle selection action to use
-     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction  $productBundleSelectionPriceAction The product bundle selection price action to use
+     * @param \TechDivision\Import\Connection\ConnectionInterface                             $connection                        The connection to use
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository         $bundleOptionRepository            The bundle option repository to use
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository    $bundleOptionValueRepository       The bundle option value repository to use
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository      $bundleSelectionRepository         The bundle selection repository to use
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository $bundleSelectionPriceRepository    The bundle selection price repository to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction           $productBundleOptionAction         The product bundle option action to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction      $productBundleOptionValueAction    The product bundle option value action to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction        $productBundleSelectionAction      The product bundle selection action to use
+     * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction   $productBundleSelectionPriceAction The product bundle selection price action to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -297,7 +297,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the repository to load bundle option data.
      *
-     * @param \TechDivision\Import\Product\Bundle\Repository\BundleOptionRespository $bundleOptionRespository The repository instance
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository $bundleOptionRespository The repository instance
      *
      * @return void
      */
@@ -309,7 +309,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the respository to load bundle option data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repository\BundleOptionRespository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository The repository instance
      */
     public function getBundleOptionRepository()
     {
@@ -319,7 +319,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the repository to load bundle option value data.
      *
-     * @param \TechDivision\Import\Product\Bundle\Repository\BundleOptionValueRespository $bundleOptionValueRespository The repository instance
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository $bundleOptionValueRespository The repository instance
      *
      * @return void
      */
@@ -331,7 +331,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the respository to load bundle option value data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repository\BundleOptionValueRespository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository The repository instance
      */
     public function getBundleOptionValueRepository()
     {
@@ -341,7 +341,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the repository to load bundle selection data.
      *
-     * @param \TechDivision\Import\Product\Bundle\Repository\BundleSelectionRespository $bundleSelectionRespository The repository instance
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository $bundleSelectionRespository The repository instance
      *
      * @return void
      */
@@ -353,7 +353,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the respository to load bundle selection data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repository\BundleSelectionRespository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository The repository instance
      */
     public function getBundleSelectionRepository()
     {
@@ -363,7 +363,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the repository to load bundle selection price data.
      *
-     * @param \TechDivision\Import\Product\Bundle\Repository\BundleSelectionPriceRespository $bundleSelectionPriceRespository The repository instance
+     * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository $bundleSelectionPriceRespository The repository instance
      *
      * @return void
      */
@@ -375,7 +375,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the respository to load bundle selection price data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repository\BundleSelectionPriceRespository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository The repository instance
      */
     public function getBundleSelectionPriceRepository()
     {
