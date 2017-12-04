@@ -20,8 +20,9 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions\Processors;
 
-use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
+use TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys;
+use TechDivision\Import\Actions\Processors\AbstractUpdateProcessor;
 
 /**
  * The product bundle selection update processor implementation.
@@ -44,12 +45,9 @@ class ProductBundleSelectionUpdateProcessor extends AbstractUpdateProcessor
     protected function getStatements()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // return the array with the SQL statements that has to be prepared
         return array(
-            $utilityClassName::UPDATE_PRODUCT_BUNDLE_SELECTION => $this->getUtilityClass()->find($utilityClassName::UPDATE_PRODUCT_BUNDLE_SELECTION)
+            SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION => $this->loadStatement(SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION)
         );
     }
 
