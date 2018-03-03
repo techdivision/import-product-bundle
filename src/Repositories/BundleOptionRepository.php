@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Bundle\Repositories;
 
 use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
+use TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys;
 
 /**
  * Repository implementation to load bundle option data.
@@ -50,12 +51,9 @@ class BundleOptionRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->bundleOptionStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::BUNDLE_OPTION));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::BUNDLE_OPTION));
     }
 
     /**

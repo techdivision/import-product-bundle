@@ -5,52 +5,51 @@
 
     <services>
 
-        <service id="import_product_bundle.utility.class.name" class="TechDivision\Import\Product\Bundle\Utils\SqlStatements"/>
-
+        <service id="import_product_bundle.repository.sql.statement" class="TechDivision\Import\Product\Bundle\Repositories\SqlStatementRepository"/>
         <service id="import_product_bundle.repository.bundle.option" class="TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.repository.bundle.option.value" class="TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.repository.bundle.selection.price" class="TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.repository.bundle.selection" class="TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
 
         <service id="import_product_bundle.action.processor.product.bundle.option.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.option.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.option.value.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionValueCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.selection.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.selection.price.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionPriceCreateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.selection.price.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionPriceUpdateProcessor">
             <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.utility.class.name"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
 
         <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction">

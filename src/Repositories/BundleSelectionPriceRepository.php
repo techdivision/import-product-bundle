@@ -22,6 +22,7 @@ namespace TechDivision\Import\Product\Bundle\Repositories;
 
 use TechDivision\Import\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
+use TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys;
 
 /**
  * Repository implementation to load bundle selection price data.
@@ -50,12 +51,9 @@ class BundleSelectionPriceRepository extends AbstractRepository
     public function init()
     {
 
-        // load the utility class name
-        $utilityClassName = $this->getUtilityClassName();
-
         // initialize the prepared statements
         $this->bundleSelectionPriceStmt =
-            $this->getConnection()->prepare($this->getUtilityClass()->find($utilityClassName::BUNDLE_SELECTION_PRICE));
+            $this->getConnection()->prepare($this->loadStatement(SqlStatementKeys::BUNDLE_SELECTION_PRICE));
     }
 
     /**
