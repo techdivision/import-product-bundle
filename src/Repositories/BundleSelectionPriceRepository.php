@@ -33,7 +33,7 @@ use TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class BundleSelectionPriceRepository extends AbstractRepository
+class BundleSelectionPriceRepository extends AbstractRepository implements BundleSelectionPriceRepositoryInterface
 {
 
     /**

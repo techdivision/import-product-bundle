@@ -23,7 +23,7 @@ namespace TechDivision\Import\Product\Bundle\Services;
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
 
 /**
- * A SLSB providing methods to load product data using a PDO connection.
+ * Interface for product bundle processor implementations.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -37,56 +37,56 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
     /**
      * Return's the action with the product bundle option CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction The action instance
+     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionInterface The action instance
      */
     public function getProductBundleOptionAction();
 
     /**
      * Return's the action with the product bundle option value CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction The action instance
+     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueActionInterface The action instance
      */
     public function getProductBundleOptionValueAction();
 
     /**
      * Return's the action with the product bundle selection CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction The action instance
+     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionActionInterface The action instance
      */
     public function getProductBundleSelectionAction();
 
     /**
      * Return's the action with the product bundle selection price CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction The action instance
+     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceActionInterface The action instance
      */
     public function getProductBundleSelectionPriceAction();
 
     /**
      * Return's the respository to load bundle option data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepositoryInterface The repository instance
      */
     public function getBundleOptionRepository();
 
     /**
      * Return's the respository to load bundle option value data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepositoryInterface The repository instance
      */
     public function getBundleOptionValueRepository();
 
     /**
      * Return's the respository to load bundle selection data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepositoryInterface The repository instance
      */
     public function getBundleSelectionRepository();
 
     /**
      * Return's the respository to load bundle selection price data.
      *
-     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository The repository instance
+     * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepositoryInterface The repository instance
      */
     public function getBundleSelectionPriceRepository();
 
