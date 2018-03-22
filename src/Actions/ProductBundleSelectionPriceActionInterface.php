@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleOptionValueAction
+ * TechDivision\Import\Product\Bundle\Repositories\ProductBundleSelectionPriceActionInterface
  *
  * NOTICE OF LICENSE
  *
@@ -20,10 +20,10 @@
 
 namespace TechDivision\Import\Product\Bundle\Actions;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Actions\ActionInterface;
 
 /**
- * An action implementation that provides functionality for product bundle option value CRUD actions.
+ * Interface for action implementations that provides functionality for product bundle selection price CRUD actions.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,6 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleOptionValueAction extends AbstractAction implements ProductBundleOptionValueActionInterface
+interface ProductBundleSelectionPriceActionInterface extends ActionInterface
 {
 }

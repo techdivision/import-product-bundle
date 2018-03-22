@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleOptionValueAction
+ * TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepositoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Bundle\Actions;
+namespace TechDivision\Import\Product\Bundle\Repositories;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Repositories\RepositoryInterface;
 
 /**
- * An action implementation that provides functionality for product bundle option value CRUD actions.
+ * Interface for repository implementations to load bundle selection price data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,6 +31,16 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleOptionValueAction extends AbstractAction implements ProductBundleOptionValueActionInterface
+interface BundleSelectionPriceRepositoryInterface extends RepositoryInterface
 {
+
+    /**
+     * Load's the bundle selection price with the passed selection/website ID.
+     *
+     * @param integer $selectionId The selection ID of the bundle selection price to be returned
+     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     *
+     * @return array The bundle selection price
+     */
+    public function findOneByOptionIdAndProductIdAndParentProductId($selectionId, $websiteId);
 }

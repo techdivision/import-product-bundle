@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleSelectionPriceAction
+ * TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepositoryInterface
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,12 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Bundle\Actions;
+namespace TechDivision\Import\Product\Bundle\Repositories;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Repositories\RepositoryInterface;
 
 /**
- * An action implementation that provides functionality for product bundle selection price CRUD actions.
+ * Interface for repository implementations to load bundle selection data.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,19 +31,17 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleSelectionPriceAction extends AbstractAction implements ProductBundleSelectionPriceActionInterface
+interface BundleSelectionRepositoryInterface extends RepositoryInterface
 {
 
     /**
-     * Creates's the entity with the passed attributes.
+     * Load's the bundle selection value with the passed option/product/parent product ID.
      *
-     * @param array       $row  The attributes of the entity to create
-     * @param string|null $name The name of the prepared statement that has to be executed
+     * @param integer $optionId        The option ID of the bundle selection to be returned
+     * @param integer $productId       The product ID of the bundle selection to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection to be returned
      *
-     * @return string The last inserted ID
+     * @return array The bundle selection
      */
-    public function create($row, $name = null)
-    {
-        return $this->getCreateProcessor()->execute($row, $name);
-    }
+    public function findOneByOptionIdAndProductIdAndParentProductId($optionId, $productId, $parentProductId);
 }
