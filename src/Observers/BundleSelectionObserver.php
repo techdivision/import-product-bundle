@@ -97,14 +97,15 @@ class BundleSelectionObserver extends AbstractProductImportObserver
     protected function prepareAttributes()
     {
 
-        // load the product bundle option SKU
-        $parentSku = $this->getValue(ColumnKeys::BUNDLE_PARENT_SKU);
-
-        // load parent/option ID
-        $parentId = $this->mapSkuToEntityId($parentSku);
-
         // load the actual option ID
         $optionId = $this->getLastOptionId();
+
+        try {
+            // load and map the parent SKU
+            $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+        } catch (\Exception $e) {
+            throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
+        }
 
         try {
             // try to load the child ID
@@ -214,6 +215,19 @@ class BundleSelectionObserver extends AbstractProductImportObserver
     protected function mapPriceType($priceType)
     {
         return $this->getSubject()->mapPriceType($priceType);
+    }
+
+    /**
+     * Return the entity ID for the passed SKU.
+     *
+     * @param string $sku The SKU to return the entity ID for
+     *
+     * @return integer The mapped entity ID
+     * @throws \Exception Is thrown if the SKU is not mapped yet
+     */
+    protected function mapSku($sku)
+    {
+        return $this->getSubject()->mapSkuToEntityId($sku);
     }
 
     /**

@@ -37,6 +37,8 @@ use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionInterfac
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueActionInterface;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionActionInterface;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceActionInterface;
+use TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface;
+use TechDivision\Import\Product\Actions\ProductRelationActionInterface;
 
 /**
  * The product bundle processor implementation.
@@ -86,6 +88,13 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     protected $productBundleSelectionPriceAction;
 
     /**
+     * The action for product relation CRUD methods.
+     *
+     * @var \TechDivision\Import\Product\Actions\ProductRelationActionInterface
+     */
+    protected $productRelationAction;
+
+    /**
      * The repository to load bundle option data.
      *
      * @var \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepositoryInterface
@@ -114,6 +123,13 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     protected $bundleSelectionPriceRespository;
 
     /**
+     * The repository to access product relations.
+     *
+     * @var \TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface
+     */
+    protected $productRelationRepository;
+
+    /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
      * @param \TechDivision\Import\Connection\ConnectionInterface                                      $connection                        The connection to use
@@ -121,10 +137,12 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepositoryInterface    $bundleOptionValueRepository       The bundle option value repository to use
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepositoryInterface      $bundleSelectionRepository         The bundle selection repository to use
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepositoryInterface $bundleSelectionPriceRepository    The bundle selection price repository to use
+     * @param \TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface             $productRelationRepository         The product relation repository to use
      * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionInterface           $productBundleOptionAction         The product bundle option action to use
      * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueActionInterface      $productBundleOptionValueAction    The product bundle option value action to use
      * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionActionInterface        $productBundleSelectionAction      The product bundle selection action to use
      * @param \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceActionInterface   $productBundleSelectionPriceAction The product bundle selection price action to use
+     * @param \TechDivision\Import\Product\Actions\ProductRelationActionInterface                      $productRelationAction             The product relation action to use
      */
     public function __construct(
         ConnectionInterface $connection,
@@ -132,20 +150,24 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
         BundleOptionValueRepositoryInterface $bundleOptionValueRepository,
         BundleSelectionRepositoryInterface $bundleSelectionRepository,
         BundleSelectionPriceRepositoryInterface $bundleSelectionPriceRepository,
+        ProductRelationRepositoryInterface $productRelationRepository,
         ProductBundleOptionActionInterface $productBundleOptionAction,
         ProductBundleOptionValueActionInterface $productBundleOptionValueAction,
         ProductBundleSelectionActionInterface $productBundleSelectionAction,
-        ProductBundleSelectionPriceActionInterface $productBundleSelectionPriceAction
+        ProductBundleSelectionPriceActionInterface $productBundleSelectionPriceAction,
+        ProductRelationActionInterface $productRelationAction
     ) {
         $this->setConnection($connection);
         $this->setBundleOptionRepository($bundleOptionRepository);
         $this->setBundleOptionValueRepository($bundleOptionValueRepository);
         $this->setBundleSelectionRepository($bundleSelectionRepository);
         $this->setBundleSelectionPriceRepository($bundleSelectionPriceRepository);
+        $this->setProductRelationRepository($productRelationRepository);
         $this->setProductBundleOptionAction($productBundleOptionAction);
         $this->setProductBundleOptionValueAction($productBundleOptionValueAction);
         $this->setProductBundleSelectionAction($productBundleSelectionAction);
         $this->setProductBundleSelectionPriceAction($productBundleSelectionPriceAction);
+        $this->setProductRelationAction($productRelationAction);
     }
 
     /**
@@ -303,6 +325,28 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     }
 
     /**
+     * Set's the action with the product relation CRUD methods.
+     *
+     * @param \TechDivision\Import\Product\Actions\ProductRelationActionInterface $productRelationAction The action with the product relation CRUD methods
+     *
+     * @return void
+     */
+    public function setProductRelationAction(ProductRelationActionInterface $productRelationAction)
+    {
+        $this->productRelationAction = $productRelationAction;
+    }
+
+    /**
+     * Return's the action with the product relation CRUD methods.
+     *
+     * @return \TechDivision\Import\Product\Actions\ProductRelationActionInterface The action instance
+     */
+    public function getProductRelationAction()
+    {
+        return $this->productRelationAction;
+    }
+
+    /**
      * Set's the repository to load bundle option data.
      *
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepositoryInterface $bundleOptionRespository The repository instance
@@ -391,6 +435,28 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     }
 
     /**
+     * Set's the repository to access product relations.
+     *
+     * @param \TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface $productRelationRepository The repository instance
+     *
+     * @return void
+     */
+    public function setProductRelationRepository(ProductRelationRepositoryInterface $productRelationRepository)
+    {
+        $this->productRelationRepository = $productRelationRepository;
+    }
+
+    /**
+     * Return's the repository to access product relations.
+     *
+     * @return \TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface The repository instance
+     */
+    public function getProductRelationRepository()
+    {
+        return $this->productRelationRepository;
+    }
+
+    /**
      * Load's the bundle option with the passed name, store + parent ID.
      *
      * @param string  $title    The title of the bundle option to be returned
@@ -433,16 +499,30 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     }
 
     /**
-     * Load's the bundle selection price with the passed selection/website ID.
+     * Load's the bundle selection price with the passed selection/parent product/website ID.
      *
-     * @param integer $selectionId The selection ID of the bundle selection price to be returned
-     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     * @param integer $selectionId     The selection ID of the bundle selection price to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection price to be returned
+     * @param integer $websiteId       The website ID of the bundle selection price to be returned
      *
      * @return array The bundle selection price
      */
-    public function loadBundleSelectionPrice($selectionId, $websiteId)
+    public function loadBundleSelectionPrice($selectionId, $parentProductId, $websiteId)
     {
-        return $this->getBundleSelectionPriceRepository()->findOneByOptionIdAndProductIdAndParentProductId($selectionId, $websiteId);
+        return $this->getBundleSelectionPriceRepository()->findOneByOptionIdAndProductIdAndParentProductId($selectionId, $parentProductId, $websiteId);
+    }
+
+    /**
+     * Load's the product relation with the passed parent/child ID.
+     *
+     * @param integer $parentId The entity ID of the product relation's parent product
+     * @param integer $childId  The entity ID of the product relation's child product
+     *
+     * @return array The product relation
+     */
+    public function loadProductRelation($parentId, $childId)
+    {
+        return $this->getProductRelationRepository()->findOneByParentIdAndChildId($parentId, $childId);
     }
 
     /**
@@ -491,5 +571,18 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     public function persistProductBundleSelectionPrice($productBundleSelectionPrice)
     {
         return $this->getProductBundleSelectionPriceAction()->persist($productBundleSelectionPrice);
+    }
+
+    /**
+     * Persist's the passed product relation data and return's the ID.
+     *
+     * @param array       $productRelation The product relation data to persist
+     * @param string|null $name            The name of the prepared statement that has to be executed
+     *
+     * @return void
+     */
+    public function persistProductRelation($productRelation, $name = null)
+    {
+        return $this->getProductRelationAction()->persist($productRelation, $name);
     }
 }

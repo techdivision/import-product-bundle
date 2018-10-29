@@ -53,11 +53,14 @@ class BundleSelectionPriceUpdateObserver extends BundleSelectionPriceObserver
         $store = $this->getStoreByStoreCode($storeViewCode);
         $websiteId = $store[MemberNames::WEBSITE_ID];
 
+        // load parent product ID
+        $parentProductId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+
         // load the selection ID for the child SKU
         $selectionId = $this->getChildSkuSelectionMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
 
-        // try to load the bundle selection price with the passed selection/website ID
-        if ($entity = $this->loadBundleSelectionPrice($selectionId, $websiteId)) {
+        // try to load the bundle selection price with the passed selection/parent product/website ID
+        if ($entity = $this->loadBundleSelectionPrice($selectionId, $parentProductId, $websiteId)) {
             return $this->mergeEntity($entity, $attr);
         }
 
@@ -68,13 +71,14 @@ class BundleSelectionPriceUpdateObserver extends BundleSelectionPriceObserver
     /**
      * Load's the bundle selection price with the passed selection/website ID.
      *
-     * @param integer $selectionId The selection ID of the bundle selection price to be returned
-     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     * @param integer $selectionId     The selection ID of the bundle selection price to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection price to be returned
+     * @param integer $websiteId       The website ID of the bundle selection price to be returned
      *
      * @return array The bundle selection price
      */
-    protected function loadBundleSelectionPrice($selectionId, $websiteId)
+    protected function loadBundleSelectionPrice($selectionId, $parentProductId, $websiteId)
     {
-        return $this->getProductBundleProcessor()->loadBundleSelectionPrice($selectionId, $websiteId);
+        return $this->getProductBundleProcessor()->loadBundleSelectionPrice($selectionId, $parentProductId, $websiteId);
     }
 }

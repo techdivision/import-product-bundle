@@ -74,10 +74,12 @@
             <argument type="service" id="import_product_bundle.repository.bundle.option.value"/>
             <argument type="service" id="import_product_bundle.repository.bundle.selection"/>
             <argument type="service" id="import_product_bundle.repository.bundle.selection.price"/>
+            <argument type="service" id="import_product.repository.product.relation"/>
             <argument type="service" id="import_product_bundle.action.product.bundle.option"/>
             <argument type="service" id="import_product_bundle.action.product.bundle.option.value"/>
             <argument type="service" id="import_product_bundle.action.product.bundle.selection"/>
             <argument type="service" id="import_product_bundle.action.product.bundle.selection.price"/>
+            <argument type="service" id="import_product.action.product.relation"/>
         </service>
 
         <service id="import_product_bundle.callback.bundle.price.view" class="TechDivision\Import\Product\Bundle\Callbacks\BundlePriceViewCallback"/>
@@ -107,6 +109,12 @@
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
         </service>
         <service id="import_product_bundle.observer.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionUpdateObserver">
+            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+        </service>
+        <service id="import_product_bundle.observer.bundle.product.relation" class="TechDivision\Import\Product\Bundle\Observers\BundleProductRelationObserver">
+            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+        </service>
+        <service id="import_product_bundle.observer.bundle.product.relation.update" class="TechDivision\Import\Product\Bundle\Observers\BundleProductRelationUpdateObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
         </service>
 
