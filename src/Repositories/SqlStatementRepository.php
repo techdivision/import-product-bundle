@@ -66,6 +66,7 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
             'SELECT *
                FROM catalog_product_bundle_selection_price
               WHERE selection_id = :selection_id
+                AND parent_product_id = :parent_product_id
                 AND website_id = :website_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION =>
             'INSERT
@@ -89,9 +90,11 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
             'INSERT
                INTO catalog_product_bundle_option_value
                     (option_id,
+                     parent_product_id,
                      store_id,
                      title)
              VALUES (:option_id,
+                     :parent_product_id,
                      :store_id,
                      :title)',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION =>
@@ -131,10 +134,12 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
             'INSERT
                INTO catalog_product_bundle_selection_price
                     (selection_id,
+                     parent_product_id,
                      website_id,
                      selection_price_type,
                      selection_price_value)
              VALUES (:selection_id,
+                     :parent_product_id,
                      :website_id,
                      :selection_price_type,
                      :selection_price_value)',
@@ -143,7 +148,8 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
                 SET selection_price_type = :selection_price_type,
                     selection_price_value = :selection_price_value
               WHERE selection_id = :selection_id
-                AND website_id = :website_id'
+                AND website_id = :website_id
+                AND parent_product_id = :parent_product_id'
     );
 
     /**

@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Bundle\Services;
 
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
+use TechDivision\Import\Product\Services\ProductRelationAwareProcessorInterface;
 
 /**
  * Interface for product bundle processor implementations.
@@ -31,7 +32,7 @@ use TechDivision\Import\Product\Services\ProductProcessorInterface;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-interface ProductBundleProcessorInterface extends ProductProcessorInterface
+interface ProductBundleProcessorInterface extends ProductProcessorInterface, ProductRelationAwareProcessorInterface
 {
 
     /**
@@ -124,14 +125,15 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
     public function loadBundleSelection($optionId, $productId, $parentProductId);
 
     /**
-     * Load's the bundle selection price with the passed selection/website ID.
+     * Load's the bundle selection price with the passed selection/parent product/website ID.
      *
-     * @param integer $selectionId The selection ID of the bundle selection price to be returned
-     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     * @param integer $selectionId     The selection ID of the bundle selection price to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection price to be returned
+     * @param integer $websiteId       The website ID of the bundle selection price to be returned
      *
      * @return array The bundle selection price
      */
-    public function loadBundleSelectionPrice($selectionId, $websiteId);
+    public function loadBundleSelectionPrice($selectionId, $parentProductId, $websiteId);
 
     /**
      * Persist's the passed product bundle option data and return's the ID.

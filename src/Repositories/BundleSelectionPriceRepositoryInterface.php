@@ -35,12 +35,13 @@ interface BundleSelectionPriceRepositoryInterface extends RepositoryInterface
 {
 
     /**
-     * Load's the bundle selection price with the passed selection/website ID.
+     * Load's the bundle selection price with the passed selection/parent product/website ID.
      *
-     * @param integer $selectionId The selection ID of the bundle selection price to be returned
-     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     * @param integer $selectionId     The selection ID of the bundle selection price to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection price to be returned
+     * @param integer $websiteId       The website ID of the bundle selection price to be returned
      *
      * @return array The bundle selection price
      */
-    public function findOneByOptionIdAndProductIdAndParentProductId($selectionId, $websiteId);
+    public function findOneByOptionIdAndProductIdAndParentProductId($selectionId, $parentProductId, $websiteId);
 }

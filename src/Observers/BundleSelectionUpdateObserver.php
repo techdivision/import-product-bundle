@@ -46,14 +46,14 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
 
         try {
             // try to load the product bundle option SKU/ID
-            $parentProductId= $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+            $parentProductId= $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
         } catch (\Exception $e) {
             throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
         }
 
         try {
             // try to load the product ID
-            $productId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
+            $productId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
         } catch (\Exception $e) {
             throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
         }
