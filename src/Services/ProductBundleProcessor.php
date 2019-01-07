@@ -21,14 +21,8 @@
 namespace TechDivision\Import\Product\Bundle\Services;
 
 use TechDivision\Import\Connection\ConnectionInterface;
-use TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository;
-use TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepository;
-use TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepository;
-use TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepository;
-use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction;
-use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction;
-use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction;
-use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction;
+use TechDivision\Import\Product\Actions\ProductRelationActionInterface;
+use TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface;
 use TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepositoryInterface;
 use TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepositoryInterface;
 use TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepositoryInterface;
@@ -37,8 +31,6 @@ use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionInterfac
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueActionInterface;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionActionInterface;
 use TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceActionInterface;
-use TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface;
-use TechDivision\Import\Product\Actions\ProductRelationActionInterface;
 
 /**
  * The product bundle processor implementation.
