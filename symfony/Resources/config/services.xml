@@ -52,18 +52,18 @@
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
 
-        <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionAction">
+        <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.update"/>
         </service>
-        <service id="import_product_bundle.action.product.bundle.option.value" class="TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueAction">
+        <service id="import_product_bundle.action.product.bundle.option.value" class="TechDivision\Import\Actions\GenericAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.value.create"/>
         </service>
-        <service id="import_product_bundle.action.product.bundle.selection" class="TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionAction">
+        <service id="import_product_bundle.action.product.bundle.selection" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.update"/>
         </service>
-        <service id="import_product_bundle.action.product.bundle.selection.price" class="TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceAction">
+        <service id="import_product_bundle.action.product.bundle.selection.price" class="TechDivision\Import\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.update"/>
         </service>
