@@ -1,3 +1,16 @@
+# Version 14.0.0
+
+## Bugfixes
+
+* None
+
+## Features
+
+* Add utility class with price types
+* Switch to latest techdivision/import-product 15.* version as dependency
+* Extract bundle subject functionality to a trait to allow usage in EE library also
+* Move library specific DI identifiers from techdivision/import-product to thhis library
+
 # Version 13.0.0
 
 ## Bugfixes
