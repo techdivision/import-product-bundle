@@ -81,17 +81,20 @@ class BundleOptionObserver extends AbstractProductImportObserver
             return;
         }
 
-        // query whether or not the option has already been created
-        if (!$this->exists($name = $this->getValue(ColumnKeys::BUNDLE_VALUE_NAME))) {
-            // load the bundle option
-            $bundleOption = $this->initializeBundleOption($this->prepareAttributes());
+        // load the name and the parent SKU
+        $name = $this->getValue(ColumnKeys::BUNDLE_VALUE_NAME);
+        $parentSku = $this->getValue(ColumnKeys::BUNDLE_PARENT_SKU);
 
-            // persist the product bundle option
-            $optionId = $this->persistProductBundleOption($bundleOption);
-
-            // store the name => option ID mapping
-            $this->addNameOptionIdMapping($name, $optionId);
+        // query whether or not the option has already been created for the parent SKU
+        if ($this->exists($parentSku, $name)) {
+            return;
         }
+
+        // load and persist the product bundle option
+        $optionId = $this->persistProductBundleOption($this->initializeBundleOption($this->prepareAttributes()));
+
+        // store the parent SKU => name mapping
+        $this->addParentSkuNameMapping(array($parentSku => array($name => $optionId)));
     }
 
     /**
@@ -151,28 +154,28 @@ class BundleOptionObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Add's the mapping for the passed name => option ID.
+     * Add's the passed mapping to the subject.
      *
-     * @param string  $name     The name of the option
-     * @param integer $optionId The created option ID
+     * @param array $mapping The mapping to add
      *
      * @return void
      */
-    protected function addNameOptionIdMapping($name, $optionId)
+    protected function addParentSkuNameMapping($mapping = array())
     {
-        $this->getSubject()->addNameOptionIdMapping($name, $optionId);
+        $this->getSubject()->addParentSkuNameMapping($mapping);
     }
 
     /**
-     * Query whether or not the option with the passed name has already been created.
+     * Query whether or not the option for the passed parent SKU and name has already been created.
      *
-     * @param string $name The option name to query for
+     * @param string $parentSku The parent SKU to query for
+     * @param string $name      The option name to query for
      *
      * @return boolean TRUE if the option already exists, else FALSE
      */
-    protected function exists($name)
+    protected function exists($parentSku, $name)
     {
-        return $this->getSubject()->exists($name);
+        return $this->getSubject()->exists($parentSku, $name);
     }
 
     /**

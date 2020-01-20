@@ -48,14 +48,15 @@ class ProductBundleObserver extends AbstractProductImportObserver
      * @var array
      */
     protected $columns = array(
-        'name'        => ColumnKeys::BUNDLE_VALUE_NAME,
-        'type'        => ColumnKeys::BUNDLE_VALUE_TYPE,
-        'required'    => ColumnKeys::BUNDLE_VALUE_REQUIRED,
-        'sku'         => ColumnKeys::BUNDLE_VALUE_SKU,
-        'price'       => ColumnKeys::BUNDLE_VALUE_PRICE,
-        'default'     => ColumnKeys::BUNDLE_VALUE_DEFAULT,
-        'default_qty' => ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY,
-        'price_type'  => ColumnKeys::BUNDLE_VALUE_PRICE_TYPE
+        'name'           => ColumnKeys::BUNDLE_VALUE_NAME,
+        'type'           => ColumnKeys::BUNDLE_VALUE_TYPE,
+        'required'       => ColumnKeys::BUNDLE_VALUE_REQUIRED,
+        'sku'            => ColumnKeys::BUNDLE_VALUE_SKU,
+        'price'          => ColumnKeys::BUNDLE_VALUE_PRICE,
+        'default'        => ColumnKeys::BUNDLE_VALUE_DEFAULT,
+        'default_qty'    => ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY,
+        'price_type'     => ColumnKeys::BUNDLE_VALUE_PRICE_TYPE,
+        'can_change_qty' => ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY
     );
 
     /**
@@ -119,8 +120,12 @@ class ProductBundleObserver extends AbstractProductImportObserver
                 // set the values
                 $values = array();
                 foreach (explode(',', $bundleValue) as $values) {
+                    // extract the column key => value pair
                     list ($key, $value) = explode('=', $values);
-                    $bundle[$this->columns[$key]] = $value;
+                    // query whether or not we've to append the column
+                    if (isset($this->columns[$key])) {
+                        $bundle[$this->columns[$key]] = $value;
+                    }
                 }
 
                 // prepare and append the bundle data

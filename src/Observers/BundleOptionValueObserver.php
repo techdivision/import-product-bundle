@@ -189,19 +189,6 @@ class BundleOptionValueObserver extends AbstractProductImportObserver
     }
 
     /**
-     * Return's the option ID for the passed name.
-     *
-     * @param string $name The name to return the option ID for
-     *
-     * @return integer The option ID for the passed name
-     * @throws \Exception Is thrown, if no option ID for the passed name is available
-     */
-    protected function getOptionIdForName($name)
-    {
-        return $this->getSubject()->getOptionIdForName($name);
-    }
-
-    /**
      * Return's the store for the passed store code.
      *
      * @param string $storeCode The store code to return the store for

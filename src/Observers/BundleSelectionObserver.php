@@ -122,7 +122,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
         }
 
         // load the default values
-        $selectionCanChangeQty = 1;
+        $selectionCanChangeQty = $this->getValue(ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY, 0);
         $selectionPriceValue = $this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE);
         $selectionQty = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY);
         $isDefault = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT);
@@ -189,19 +189,6 @@ class BundleSelectionObserver extends AbstractProductImportObserver
     protected function raisePositionCounter()
     {
         return $this->getSubject()->raisePositionCounter();
-    }
-
-    /**
-     * Return's the option ID for the passed name.
-     *
-     * @param string $name The name to return the option ID for
-     *
-     * @return integer The option ID for the passed name
-     * @throws \Exception Is thrown, if no option ID for the passed name is available
-     */
-    protected function getOptionIdForName($name)
-    {
-        return $this->getSubject()->getOptionIdForName($name);
     }
 
     /**

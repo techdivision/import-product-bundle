@@ -147,52 +147,28 @@ trait BundleSubjectTrait
     }
 
     /**
-     * Return's the option ID for the passed name.
+     * Add's the passed mapping to the subject.
      *
-     * @param string $name The name to return the option ID for
-     *
-     * @return integer The option ID for the passed name
-     * @throws \Exception Is thrown, if no option ID for the passed name is available
-     */
-    public function getOptionIdForName($name)
-    {
-
-        // query whether or not an option ID for the passed name is available
-        if (isset($this->nameOptionIdMapping[$name])) {
-            return $this->nameOptionIdMapping[$name];
-        }
-
-        // throw an exception, if not
-        throw new \Exception(
-            $this->appendExceptionSuffix(
-                sprintf('Can\'t find option ID for name %s', $name)
-            )
-        );
-    }
-
-    /**
-     * Add's the mapping for the passed name => option ID.
-     *
-     * @param string  $name     The name of the option
-     * @param integer $optionId The created option ID
+     * @param array $mapping The mapping to add
      *
      * @return void
      */
-    public function addNameOptionIdMapping($name, $optionId)
+    public function addParentSkuNameMapping($mapping = array())
     {
-        $this->nameOptionIdMapping[$name] = $optionId;
+        $this->nameOptionIdMapping = array_merge_recursive($this->nameOptionIdMapping, $mapping);
     }
 
     /**
-     * Query whether or not the option with the passed name has already been created.
+     * Query whether or not the option for the passed parent SKU and name has already been created.
      *
-     * @param string $name The option name to query for
+     * @param string $parentSku The parent SKU to query for
+     * @param string $name      The option name to query for
      *
      * @return boolean TRUE if the option already exists, else FALSE
      */
-    public function exists($name)
+    public function exists($parentSku, $name)
     {
-        return isset($this->nameOptionIdMapping[$name]);
+        return isset($this->nameOptionIdMapping[$parentSku][$name]);
     }
 
     /**
@@ -202,6 +178,7 @@ trait BundleSubjectTrait
      */
     public function getLastOptionId()
     {
-        return end($this->nameOptionIdMapping);
+        $mapping = end($this->nameOptionIdMapping);
+        return end($mapping);
     }
 }

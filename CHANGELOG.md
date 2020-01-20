@@ -1,3 +1,13 @@
+# Version 19.0.0
+
+## Bugfixes
+
+* Fixed issue with missing bundle options
+
+## Features
+
+* None
+
 # Version 18.0.0
 
 ## Bugfixes
