@@ -157,4 +157,11 @@ class ColumnKeys extends \TechDivision\Import\Product\Utils\ColumnKeys
      * @var string
      */
     const BUNDLE_VALUE_CAN_CHANGE_QTY = 'bundle_value_can_change_qty';
+
+    /**
+     * Name for the column 'bundle_value_position'.
+     *
+     * @var string
+     */
+    const BUNDLE_VALUE_POSITION = 'bundle_value_position';
 }

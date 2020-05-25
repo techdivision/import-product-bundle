@@ -21,9 +21,12 @@
 namespace TechDivision\Import\Product\Bundle\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Observers\StateDetectorInterface;
+use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
+use TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes;
+use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
@@ -46,13 +49,31 @@ class BundleSelectionObserver extends AbstractProductImportObserver
     protected $productBundleProcessor;
 
     /**
+     * The attribute loader instance.
+     *
+     * @var \TechDivision\Import\Observers\AttributeLoaderInterface
+     */
+    protected $attributeLoader;
+
+    /**
      * Initialize the observer with the passed product bundle processor instance.
      *
      * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productBundleProcessor The product bundle processor instance
+     * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null                 $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Observers\StateDetectorInterface|null                   $stateDetector          The state detector instance
      */
-    public function __construct(ProductBundleProcessorInterface $productBundleProcessor)
-    {
+    public function __construct(
+        ProductBundleProcessorInterface $productBundleProcessor,
+        AttributeLoaderInterface $attributeLoader = null,
+        StateDetectorInterface $stateDetector = null
+    ) {
+
+        // initialize the product bundle processor and the attribute loader instance
         $this->productBundleProcessor = $productBundleProcessor;
+        $this->attributeLoader = $attributeLoader;
+
+        // pass the state detector to the parent method
+        parent::__construct($stateDetector);
     }
 
     /**
@@ -82,11 +103,21 @@ class BundleSelectionObserver extends AbstractProductImportObserver
         }
 
         // prepare, initialize and persist the product bundle selection data
-        $productBundleSelection = $this->initializeBundleSelection($this->prepareAttributes());
+        $productBundleSelection = $this->initializeBundleSelection($this->prepareDynamicAttributes());
         $selectionId = $this->persistProductBundleSelection($productBundleSelection);
 
         // add the mapping for the child SKU => selection ID
         $this->addChildSkuSelectionIdMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU), $selectionId);
+    }
+
+    /**
+     * Appends the dynamic attributes to the static ones and returns them.
+     *
+     * @return array The array with all available attributes
+     */
+    protected function prepareDynamicAttributes() : array
+    {
+        return array_merge($this->prepareAttributes(), $this->attributeLoader ? $this->attributeLoader->load($this, $this->columns) : array());
     }
 
     /**
@@ -132,18 +163,32 @@ class BundleSelectionObserver extends AbstractProductImportObserver
 
         // prepare the product bundle selection data
         return $this->initializeEntity(
-            array(
-                MemberNames::OPTION_ID                => $optionId,
-                MemberNames::PARENT_PRODUCT_ID        => $parentId,
-                MemberNames::PRODUCT_ID               => $childId,
-                MemberNames::POSITION                 => $position,
-                MemberNames::IS_DEFAULT               => $isDefault,
-                MemberNames::SELECTION_PRICE_TYPE     => $selectionPriceType,
-                MemberNames::SELECTION_PRICE_VALUE    => $selectionPriceValue,
-                MemberNames::SELECTION_QTY            => $selectionQty,
-                MemberNames::SELECTION_CAN_CHANGE_QTY => $selectionCanChangeQty
+            $this->loadRawEntity(
+                array(
+                    MemberNames::OPTION_ID                => $optionId,
+                    MemberNames::PARENT_PRODUCT_ID        => $parentId,
+                    MemberNames::PRODUCT_ID               => $childId,
+                    MemberNames::POSITION                 => $position,
+                    MemberNames::IS_DEFAULT               => $isDefault,
+                    MemberNames::SELECTION_PRICE_TYPE     => $selectionPriceType,
+                    MemberNames::SELECTION_PRICE_VALUE    => $selectionPriceValue,
+                    MemberNames::SELECTION_QTY            => $selectionQty,
+                    MemberNames::SELECTION_CAN_CHANGE_QTY => $selectionCanChangeQty
+                )
             )
         );
+    }
+
+    /**
+     * Load's and return's a raw entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param array $data An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    protected function loadRawEntity(array $data = array())
+    {
+        return $this->getProductVariantProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_SELECTION, $data);
     }
 
     /**

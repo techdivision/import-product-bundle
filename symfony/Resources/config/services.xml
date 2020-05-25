@@ -9,8 +9,29 @@
 
     <services>
 
+        <!--
+         | The DI utility configuration
+         |-->
+        <service id="import_product_bundle.util.sql.compilers" class="\ArrayObject">
+            <call method="append">
+                <argument id="import.util.primary.key" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.table.prefix" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.names" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.placeholders" type="service"/>
+            </call>
+            <call method="append">
+                <argument id="import.util.column.values" type="service"/>
+            </call>
+        </service>
+
         <service id="import_product_bundle.repository.sql.statement" class="TechDivision\Import\Product\Bundle\Repositories\SqlStatementRepository">
-            <argument type="service" id="import.util.sql.compilers"/>
+            <argument type="service" id="import_product_bundle.util.sql.compilers"/>
         </service>
         <service id="import_product_bundle.repository.bundle.option" class="TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository">
             <argument type="service" id="connection"/>
@@ -78,6 +99,12 @@
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.update"/>
         </service>
 
+        <service id="import_product_bundle.loader.raw.entity" class="TechDivision\Import\Product\Bundle\Loaders\RawEntityLoader">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import.loader.column.metadata"/>
+            <argument type="service" id="import.loader.raw.entity"/>
+        </service>
+
         <service id="import_product_bundle.processor.product.bundle" class="TechDivision\Import\Product\Bundle\Services\ProductBundleProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.bundle.option"/>
@@ -90,6 +117,7 @@
             <argument type="service" id="import_product_bundle.action.product.bundle.selection"/>
             <argument type="service" id="import_product_bundle.action.product.bundle.selection.price"/>
             <argument type="service" id="import_product.action.product.relation"/>
+            <argument type="service" id="import_product_bundle.loader.raw.entity"/>
         </service>
 
         <service id="import_product_bundle.callback.bundle.price.view" class="TechDivision\Import\Product\Bundle\Callbacks\BundlePriceViewCallback"/>
@@ -99,9 +127,11 @@
         <service id="import_product_bundle.observer.product.bundle" class="TechDivision\Import\Product\Bundle\Observers\ProductBundleObserver"/>
         <service id="import_product_bundle.observer.bundle.option" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product_bundle.observer.bundle.option.update" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionUpdateObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product_bundle.observer.bundle.option.value" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionValueObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
@@ -114,11 +144,13 @@
         </service>
         <service id="import_product_bundle.observer.bundle.selection.price" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionPriceObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
-        </service>
-        <service id="import_product_bundle.observer.bundle.selection.price.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionPriceUpdateObserver">
-            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>
         <service id="import_product_bundle.observer.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionUpdateObserver">
+            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+        </service>
+        <service id="import_product_bundle.observer.bundle.selection.price.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionPriceUpdateObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
         </service>
         <service id="import_product_bundle.observer.bundle.product.relation" class="TechDivision\Import\Product\Bundle\Observers\BundleProductRelationObserver">

@@ -36,6 +36,13 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface, Pro
 {
 
     /**
+     * Return's the raw entity loader instance.
+     *
+     * @return \TechDivision\Import\Loaders\LoaderInterface The raw entity loader instance
+     */
+    public function getRawEntityLoader();
+
+    /**
      * Return's the action with the product bundle option CRUD methods.
      *
      * @return \TechDivision\Import\Actions\ActionInterface The action instance
@@ -90,6 +97,16 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface, Pro
      * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepositoryInterface The repository instance
      */
     public function getBundleSelectionPriceRepository();
+
+    /**
+     * Load's and return's a raw entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param string $entityTypeCode The entity type code to return the raw entity for
+     * @param array  $data           An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    public function loadRawEntity($entityTypeCode, array $data = array());
 
     /**
      * Load's the bundle option with the passed name, store + parent ID.

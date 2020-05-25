@@ -48,15 +48,16 @@ class ProductBundleObserver extends AbstractProductImportObserver
      * @var array
      */
     protected $columns = array(
-        'name'           => ColumnKeys::BUNDLE_VALUE_NAME,
-        'type'           => ColumnKeys::BUNDLE_VALUE_TYPE,
-        'required'       => ColumnKeys::BUNDLE_VALUE_REQUIRED,
-        'sku'            => ColumnKeys::BUNDLE_VALUE_SKU,
-        'price'          => ColumnKeys::BUNDLE_VALUE_PRICE,
-        'default'        => ColumnKeys::BUNDLE_VALUE_DEFAULT,
-        'default_qty'    => ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY,
-        'price_type'     => ColumnKeys::BUNDLE_VALUE_PRICE_TYPE,
-        'can_change_qty' => ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY
+        'name'           => array(ColumnKeys::BUNDLE_VALUE_NAME => ColumnKeys::BUNDLE_VALUES),
+        'type'           => array(ColumnKeys::BUNDLE_VALUE_TYPE => ColumnKeys::BUNDLE_VALUES),
+        'required'       => array(ColumnKeys::BUNDLE_VALUE_REQUIRED => ColumnKeys::BUNDLE_VALUES),
+        'sku'            => array(ColumnKeys::BUNDLE_VALUE_SKU => ColumnKeys::BUNDLE_VALUES),
+        'price'          => array(ColumnKeys::BUNDLE_VALUE_PRICE => ColumnKeys::BUNDLE_VALUES),
+        'default'        => array(ColumnKeys::BUNDLE_VALUE_DEFAULT => ColumnKeys::BUNDLE_VALUES),
+        'default_qty'    => array(ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY => ColumnKeys::BUNDLE_VALUES),
+        'price_type'     => array(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE => ColumnKeys::BUNDLE_VALUES),
+        'can_change_qty' => array(ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY => ColumnKeys::BUNDLE_VALUES),
+        'position'       => array(ColumnKeys::BUNDLE_VALUE_POSITION => ColumnKeys::BUNDLE_VALUES)
     );
 
     /**
@@ -94,26 +95,18 @@ class ProductBundleObserver extends AbstractProductImportObserver
                         ColumnKeys::BUNDLE_SHIPMENT_TYPE => $this->getValue(ColumnKeys::BUNDLE_SHIPMENT_TYPE),
                     ),
                     array(
-                        ColumnKeys::BUNDLE_PARENT_SKU        => ColumnKeys::SKU,
-                        ColumnKeys::STORE_VIEW_CODE          => ColumnKeys::STORE_VIEW_CODE,
-                        ColumnKeys::BUNDLE_SKU_TYPE          => ColumnKeys::BUNDLE_SKU_TYPE,
-                        ColumnKeys::BUNDLE_PRICE_TYPE        => ColumnKeys::BUNDLE_PRICE_TYPE,
-                        ColumnKeys::BUNDLE_PRICE_VIEW        => ColumnKeys::BUNDLE_PRICE_VIEW,
-                        ColumnKeys::BUNDLE_WEIGHT_TYPE       => ColumnKeys::BUNDLE_WEIGHT_TYPE,
-                        ColumnKeys::BUNDLE_SHIPMENT_TYPE     => ColumnKeys::BUNDLE_SHIPMENT_TYPE,
-                        ColumnKeys::BUNDLE_VALUE_NAME        => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_TYPE        => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_REQUIRED    => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_SKU         => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_PRICE       => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_DEFAULT     => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_PRICE_TYPE  => ColumnKeys::BUNDLE_VALUES
+                        ColumnKeys::BUNDLE_PARENT_SKU           => ColumnKeys::SKU,
+                        ColumnKeys::STORE_VIEW_CODE             => ColumnKeys::STORE_VIEW_CODE,
+                        ColumnKeys::BUNDLE_SKU_TYPE             => ColumnKeys::BUNDLE_SKU_TYPE,
+                        ColumnKeys::BUNDLE_PRICE_TYPE           => ColumnKeys::BUNDLE_PRICE_TYPE,
+                        ColumnKeys::BUNDLE_PRICE_VIEW           => ColumnKeys::BUNDLE_PRICE_VIEW,
+                        ColumnKeys::BUNDLE_WEIGHT_TYPE          => ColumnKeys::BUNDLE_WEIGHT_TYPE,
+                        ColumnKeys::BUNDLE_SHIPMENT_TYPE        => ColumnKeys::BUNDLE_SHIPMENT_TYPE
                     )
                 );
 
                 // initialize the columns
-                foreach ($this->columns as $columnKey) {
+                foreach ($this->columns as $columnKey => $originalColumName) {
                     $bundle[$columnKey] = null;
                 }
 
