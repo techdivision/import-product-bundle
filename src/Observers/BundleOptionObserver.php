@@ -21,13 +21,15 @@
 namespace TechDivision\Import\Product\Bundle\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
-use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 use TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes;
+use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
  * Oberserver that provides functionality for the bundle option replace operation.
@@ -38,7 +40,7 @@ use TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class BundleOptionObserver extends AbstractProductImportObserver
+class BundleOptionObserver extends AbstractProductImportObserver implements DynamicAttributeObserverInterface
 {
 
     /**
@@ -54,6 +56,22 @@ class BundleOptionObserver extends AbstractProductImportObserver
      * @var \TechDivision\Import\Observers\AttributeLoaderInterface
      */
     protected $attributeLoader;
+
+    /**
+     * Initialize the "dymanmic" columns.
+     *
+     * @var array
+     */
+    protected $columns = array(MemberNames::POSITION => array(ColumnKeys::BUNDLE_VALUE_POSITION, BackendTypeKeys::BACKEND_TYPE_INT));
+
+    /**
+     * Array with virtual column name mappings (this is a temporary
+     * solution till techdivision/import#179 as been implemented).
+     *
+     * @var array
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected $virtualMapping = array(MemberNames::POSITION => ColumnKeys::BUNDLE_VALUE_POSITION);
 
     /**
      * Initialize the observer with the passed product bundle processor instance.
@@ -84,6 +102,19 @@ class BundleOptionObserver extends AbstractProductImportObserver
     protected function getProductBundleProcessor()
     {
         return $this->productBundleProcessor;
+    }
+
+    /**
+     * Query whether or not a value for the column with the passed name exists.
+     *
+     * @param string $name The column name to query for a valid value
+     *
+     * @return boolean TRUE if the value is set, else FALSE
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    public function hasValue($name)
+    {
+        return parent::hasValue(isset($this->virtualMapping[$name]) ? $this->virtualMapping[$name] : $name);
     }
 
     /**
@@ -136,9 +167,6 @@ class BundleOptionObserver extends AbstractProductImportObserver
     protected function prepareAttributes()
     {
 
-        // reset the position counter for the bundle selection
-        $this->resetPositionCounter();
-
         try {
             // load and map the parent SKU
             $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
@@ -147,9 +175,8 @@ class BundleOptionObserver extends AbstractProductImportObserver
         }
 
         // extract the parent/child ID as well as type and position
-        $required = $this->getValue(ColumnKeys::BUNDLE_VALUE_REQUIRED);
         $type = $this->getValue(ColumnKeys::BUNDLE_VALUE_TYPE);
-        $position = 1;
+        $required = $this->getValue(ColumnKeys::BUNDLE_VALUE_REQUIRED);
 
         // return the prepared product
         return $this->initializeEntity(
@@ -157,7 +184,6 @@ class BundleOptionObserver extends AbstractProductImportObserver
                 array(
                     MemberNames::PARENT_ID => $parentId,
                     MemberNames::REQUIRED  => $required,
-                    MemberNames::POSITION  => $position,
                     MemberNames::TYPE      => $type
                 )
             )
@@ -173,7 +199,7 @@ class BundleOptionObserver extends AbstractProductImportObserver
      */
     protected function loadRawEntity(array $data = array())
     {
-        return $this->getProductVariantProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_OPTION, $data);
+        return $this->getProductBundleProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_OPTION, $data);
     }
 
     /**
@@ -192,6 +218,7 @@ class BundleOptionObserver extends AbstractProductImportObserver
      * Reset the position counter to 1.
      *
      * @return void
+     * @deprecated Since 22.0.0
      */
     protected function resetPositionCounter()
     {

@@ -52,6 +52,7 @@ trait BundleSubjectTrait
      * The position counter, if no position for the bundle selection has been specified.
      *
      * @var integer
+     * @deprecated Since 22.0.0
      */
     protected $positionCounter = 1;
 
@@ -69,6 +70,7 @@ trait BundleSubjectTrait
      * Reset the position counter to 1.
      *
      * @return void
+     * @deprecated Since 22.0.0
      */
     public function resetPositionCounter()
     {
@@ -79,6 +81,7 @@ trait BundleSubjectTrait
      * Returns the acutal value of the position counter and raise's it by one.
      *
      * @return integer The actual value of the position counter
+     * @deprecated Since 22.0.0
      */
     public function raisePositionCounter()
     {

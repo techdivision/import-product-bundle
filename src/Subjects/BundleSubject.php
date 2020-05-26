@@ -21,7 +21,9 @@
 namespace TechDivision\Import\Product\Bundle\Subjects;
 
 use TechDivision\Import\Utils\RegistryKeys;
+use TechDivision\Import\Product\Utils\ConfigurationKeys;
 use TechDivision\Import\Product\Subjects\AbstractProductSubject;
+use TechDivision\Import\Subjects\CleanUpColumnsSubjectInterface;
 
 /**
  * A subject implementation that handles the process to import product bundles.
@@ -32,7 +34,7 @@ use TechDivision\Import\Product\Subjects\AbstractProductSubject;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class BundleSubject extends AbstractProductSubject
+class BundleSubject extends AbstractProductSubject implements CleanUpColumnsSubjectInterface
 {
 
     /**
@@ -63,5 +65,26 @@ class BundleSubject extends AbstractProductSubject
 
         // load the SKU => entity ID mapping
         $this->skuEntityIdMapping = $status[RegistryKeys::SKU_ENTITY_ID_MAPPING];
+    }
+
+    /**
+     * Merge the columns from the configuration with all image type columns to define which
+     * columns should be cleaned-up.
+     *
+     * @return array The columns that has to be cleaned-up
+     */
+    public function getCleanUpColumns()
+    {
+
+        // initialize the array for the columns that has to be cleaned-up
+        $cleanUpColumns = array();
+
+        // query whether or not an array has been specified in the configuration
+        if ($this->getConfiguration()->hasParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS)) {
+            $cleanUpColumns = $this->getConfiguration()->getParam(ConfigurationKeys::CLEAN_UP_EMPTY_COLUMNS);
+        }
+
+        // return the array with the column names
+        return $cleanUpColumns;
     }
 }

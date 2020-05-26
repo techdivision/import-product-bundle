@@ -69,22 +69,12 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
                 AND parent_product_id = :parent_product_id
                 AND website_id = :website_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION =>
-            'INSERT
-               INTO ${table:catalog_product_bundle_option}
-                    (parent_id,
-                     required,
-                     position,
-                     type)
-             VALUES (:parent_id,
-                     :required,
-                     :position,
-                     :type)',
+            'INSERT ${table:catalog_product_bundle_option}
+                    (${column-names:catalog_product_bundle_option})
+             VALUES (${column-placeholders:catalog_product_bundle_option})',
         SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_OPTION =>
             'UPDATE ${table:catalog_product_bundle_option}
-                SET parent_id = :parent_id,
-                    required = :required,
-                    position = :position,
-                    type = :type
+                SET ${column-values:catalog_product_bundle_option}
               WHERE option_id = :option_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION_VALUE =>
             'INSERT
@@ -98,37 +88,12 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
                      :store_id,
                      :title)',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION =>
-            'INSERT
-               INTO ${table:catalog_product_bundle_selection}
-                    (option_id,
-                     parent_product_id,
-                     product_id,
-                     position,
-                     is_default,
-                     selection_price_type,
-                     selection_price_value,
-                     selection_qty,
-                     selection_can_change_qty)
-             VALUES (:option_id,
-                     :parent_product_id,
-                     :product_id,
-                     :position,
-                     :is_default,
-                     :selection_price_type,
-                     :selection_price_value,
-                     :selection_qty,
-                     :selection_can_change_qty)',
+            'INSERT ${table:catalog_product_bundle_selection}
+                    (${column-names:catalog_product_bundle_selection})
+             VALUES (${column-placeholders:catalog_product_bundle_selection})',
         SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION =>
             'UPDATE ${table:catalog_product_bundle_selection}
-                SET option_id = :option_id,
-                    parent_product_id = :parent_product_id,
-                    product_id = :product_id,
-                    position = :position,
-                    is_default = :is_default,
-                    selection_price_type = :selection_price_type,
-                    selection_price_value = :selection_price_value,
-                    selection_qty = :selection_qty,
-                    selection_can_change_qty = :selection_can_change_qty
+                SET ${column-values:catalog_product_bundle_selection}
               WHERE selection_id = :selection_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE =>
             'INSERT

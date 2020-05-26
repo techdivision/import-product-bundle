@@ -21,12 +21,14 @@
 namespace TechDivision\Import\Product\Bundle\Observers;
 
 use TechDivision\Import\Utils\StoreViewCodes;
+use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
+use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 use TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
@@ -38,7 +40,7 @@ use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class BundleSelectionObserver extends AbstractProductImportObserver
+class BundleSelectionObserver extends AbstractProductImportObserver implements DynamicAttributeObserverInterface
 {
 
     /**
@@ -54,6 +56,32 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      * @var \TechDivision\Import\Observers\AttributeLoaderInterface
      */
     protected $attributeLoader;
+
+    /**
+     * Initialize the "dymanmic" columns.
+     *
+     * @var array
+     */
+    protected $columns = array(
+        MemberNames::POSITION                 => array(ColumnKeys::BUNDLE_VALUE_SELECTION_POSITION, BackendTypeKeys::BACKEND_TYPE_INT),
+        MemberNames::IS_DEFAULT               => array(ColumnKeys::BUNDLE_VALUE_DEFAULT, BackendTypeKeys::BACKEND_TYPE_INT),
+        MemberNames::SELECTION_PRICE_VALUE    => array(ColumnKeys::BUNDLE_VALUE_PRICE, BackendTypeKeys::BACKEND_TYPE_FLOAT),
+        MemberNames::SELECTION_CAN_CHANGE_QTY => array(ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY, BackendTypeKeys::BACKEND_TYPE_INT)
+    );
+
+    /**
+     * Array with virtual column name mappings (this is a temporary
+     * solution till techdivision/import#179 as been implemented).
+     *
+     * @var array
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected $virtualMapping = array(
+        MemberNames::POSITION                 => ColumnKeys::BUNDLE_VALUE_SELECTION_POSITION,
+        MemberNames::IS_DEFAULT               => ColumnKeys::BUNDLE_VALUE_DEFAULT,
+        MemberNames::SELECTION_PRICE_VALUE    => ColumnKeys::BUNDLE_VALUE_PRICE,
+        MemberNames::SELECTION_CAN_CHANGE_QTY => ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY
+    );
 
     /**
      * Initialize the observer with the passed product bundle processor instance.
@@ -84,6 +112,19 @@ class BundleSelectionObserver extends AbstractProductImportObserver
     protected function getProductBundleProcessor()
     {
         return $this->productBundleProcessor;
+    }
+
+    /**
+     * Query whether or not a value for the column with the passed name exists.
+     *
+     * @param string $name The column name to query for a valid value
+     *
+     * @return boolean TRUE if the value is set, else FALSE
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    public function hasValue($name)
+    {
+        return parent::hasValue(isset($this->virtualMapping[$name]) ? $this->virtualMapping[$name] : $name);
     }
 
     /**
@@ -153,27 +194,17 @@ class BundleSelectionObserver extends AbstractProductImportObserver
         }
 
         // load the default values
-        $selectionCanChangeQty = $this->getValue(ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY, 0);
-        $selectionPriceValue = $this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE);
         $selectionQty = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY);
-        $isDefault = $this->getValue(ColumnKeys::BUNDLE_VALUE_DEFAULT);
-
-        // laod the position counter
-        $position = $this->raisePositionCounter();
 
         // prepare the product bundle selection data
         return $this->initializeEntity(
             $this->loadRawEntity(
                 array(
-                    MemberNames::OPTION_ID                => $optionId,
-                    MemberNames::PARENT_PRODUCT_ID        => $parentId,
-                    MemberNames::PRODUCT_ID               => $childId,
-                    MemberNames::POSITION                 => $position,
-                    MemberNames::IS_DEFAULT               => $isDefault,
-                    MemberNames::SELECTION_PRICE_TYPE     => $selectionPriceType,
-                    MemberNames::SELECTION_PRICE_VALUE    => $selectionPriceValue,
-                    MemberNames::SELECTION_QTY            => $selectionQty,
-                    MemberNames::SELECTION_CAN_CHANGE_QTY => $selectionCanChangeQty
+                    MemberNames::OPTION_ID            => $optionId,
+                    MemberNames::PARENT_PRODUCT_ID    => $parentId,
+                    MemberNames::PRODUCT_ID           => $childId,
+                    MemberNames::SELECTION_QTY        => $selectionQty,
+                    MemberNames::SELECTION_PRICE_TYPE => $selectionPriceType
                 )
             )
         );
@@ -188,7 +219,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      */
     protected function loadRawEntity(array $data = array())
     {
-        return $this->getProductVariantProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_SELECTION, $data);
+        return $this->getProductBundleProcessor()->loadRawEntity(EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_SELECTION, $data);
     }
 
     /**
@@ -230,6 +261,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver
      * Returns the acutal value of the position counter and raise's it by one.
      *
      * @return integer The actual value of the position counter
+     * @deprecated Since 22.0.0
      */
     protected function raisePositionCounter()
     {
