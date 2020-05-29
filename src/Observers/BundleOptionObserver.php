@@ -20,11 +20,13 @@
 
 namespace TechDivision\Import\Product\Bundle\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
+use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
@@ -58,6 +60,13 @@ class BundleOptionObserver extends AbstractProductImportObserver implements Dyna
     protected $attributeLoader;
 
     /**
+     * The entity merger instance.
+     *
+     * @var \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface
+     */
+    protected $entityMerger;
+
+    /**
      * Initialize the "dymanmic" columns.
      *
      * @var array
@@ -65,30 +74,24 @@ class BundleOptionObserver extends AbstractProductImportObserver implements Dyna
     protected $columns = array(MemberNames::POSITION => array(ColumnKeys::BUNDLE_VALUE_POSITION, BackendTypeKeys::BACKEND_TYPE_INT));
 
     /**
-     * Array with virtual column name mappings (this is a temporary
-     * solution till techdivision/import#179 as been implemented).
-     *
-     * @var array
-     * @todo https://github.com/techdivision/import/issues/179
-     */
-    protected $virtualMapping = array(MemberNames::POSITION => ColumnKeys::BUNDLE_VALUE_POSITION);
-
-    /**
      * Initialize the observer with the passed product bundle processor instance.
      *
      * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productBundleProcessor The product bundle processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null                 $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface           $entityMerger           The entity merger instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null                   $stateDetector          The state detector instance
      */
     public function __construct(
         ProductBundleProcessorInterface $productBundleProcessor,
         AttributeLoaderInterface $attributeLoader = null,
+        EntityMergerInterface $entityMerger = null,
         StateDetectorInterface $stateDetector = null
     ) {
 
-        // initialize the product bundle processor and the attribute loader instance
+        // initialize the product bundle processor, the attribute loader and entity merger instance
         $this->productBundleProcessor = $productBundleProcessor;
         $this->attributeLoader = $attributeLoader;
+        $this->entityMerger = $entityMerger;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
@@ -102,19 +105,6 @@ class BundleOptionObserver extends AbstractProductImportObserver implements Dyna
     protected function getProductBundleProcessor()
     {
         return $this->productBundleProcessor;
-    }
-
-    /**
-     * Query whether or not a value for the column with the passed name exists.
-     *
-     * @param string $name The column name to query for a valid value
-     *
-     * @return boolean TRUE if the value is set, else FALSE
-     * @todo https://github.com/techdivision/import/issues/179
-     */
-    public function hasValue($name)
-    {
-        return parent::hasValue(isset($this->virtualMapping[$name]) ? $this->virtualMapping[$name] : $name);
     }
 
     /**
@@ -187,6 +177,26 @@ class BundleOptionObserver extends AbstractProductImportObserver implements Dyna
                     MemberNames::TYPE      => $type
                 )
             )
+        );
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * passed status.
+     *
+     * @param array       $entity        The entity to merge the attributes into
+     * @param array       $attr          The attributes to be merged
+     * @param string|null $changeSetName The change set name to use
+     *
+     * @return array The merged entity
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected function mergeEntity(array $entity, array $attr, $changeSetName = null)
+    {
+        return array_merge(
+            $entity,
+            $this->entityMerger ? $this->entityMerger->merge($this, $entity, $attr) : $attr,
+            array(EntityStatus::MEMBER_NAME => $this->detectState($entity, $attr, $changeSetName))
         );
     }
 

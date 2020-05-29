@@ -10,28 +10,35 @@
     <services>
 
         <!--
-         | The DI utility configuration
+         | The DI configuration for the entity mergers
          |-->
-        <service id="import_product_bundle.util.sql.compilers" class="\ArrayObject">
+        <service id="import_product_bundle.loader.header.mapping.option" class="TechDivision\Import\Loaders\EntityTypeHeaderMappingLoader">
+            <argument type="service" id="import.loader.header.mapping"/>
+            <argument type="constant">TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_OPTION</argument>
+        </service>
+        <service id="import_product_bundle.loader.header.mapping.selection" class="TechDivision\Import\Loaders\EntityTypeHeaderMappingLoader">
+            <argument type="service" id="import.loader.header.mapping"/>
+            <argument type="constant">TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes::CATALOG_PRODUCT_BUNDLE_SELECTION</argument>
+        </service>
+        <service id="import_product_bundle.entity.merger.empty.columns.option" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
+            <argument type="service" id="import_product_bundle.loader.header.mapping.option"/>
+        </service>
+        <service id="import_product_bundle.entity.merger.empty.columns.selection" class="TechDivision\Import\Observers\EntityMergers\CleanUpColumnsEntityMerger">
+            <argument type="service" id="import_product_bundle.loader.header.mapping.selection"/>
+        </service>
+        <service id="import_product_bundle.entity.merger.composite.option" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
             <call method="append">
-                <argument id="import.util.primary.key" type="service"/>
+                <argument type="service" id="import_product_bundle.entity.merger.empty.columns.option"/>
             </call>
+        </service>
+        <service id="import_product_bundle.entity.merger.composite.selection" class="TechDivision\Import\Observers\EntityMergers\GenericCompositeEntityMerger">
             <call method="append">
-                <argument id="import.util.table.prefix" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.names" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.placeholders" type="service"/>
-            </call>
-            <call method="append">
-                <argument id="import.util.column.values" type="service"/>
+                <argument type="service" id="import_product_bundle.entity.merger.empty.columns.selection"/>
             </call>
         </service>
 
         <service id="import_product_bundle.repository.sql.statement" class="TechDivision\Import\Product\Bundle\Repositories\SqlStatementRepository">
-            <argument type="service" id="import_product_bundle.util.sql.compilers"/>
+            <argument type="service" id="import.util.sql.compilers"/>
         </service>
         <service id="import_product_bundle.repository.bundle.option" class="TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepository">
             <argument type="service" id="connection"/>
@@ -53,20 +60,24 @@
         <service id="import_product_bundle.action.processor.product.bundle.option.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.option.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionUpdateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
-        </service>
-        <service id="import_product_bundle.action.processor.product.bundle.option.value.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionValueCreateProcessor">
-            <argument type="service" id="connection"/>
-            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.selection.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
         </service>
         <service id="import_product_bundle.action.processor.product.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionUpdateProcessor">
+            <argument type="service" id="connection"/>
+            <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+        </service>
+        <service id="import_product_bundle.action.processor.product.bundle.option.value.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionValueCreateProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
@@ -128,10 +139,22 @@
         <service id="import_product_bundle.observer.bundle.option" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product_bundle.entity.merger.composite.option"/>
         </service>
         <service id="import_product_bundle.observer.bundle.option.update" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionUpdateObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product_bundle.entity.merger.composite.option"/>
+        </service>
+        <service id="import_product_bundle.observer.bundle.selection" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionObserver">
+            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product_bundle.entity.merger.composite.selection"/>
+        </service>
+        <service id="import_product_bundle.observer.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionUpdateObserver">
+            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
+            <argument type="service" id="import_product_bundle.entity.merger.composite.selection"/>
         </service>
         <service id="import_product_bundle.observer.bundle.option.value" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionValueObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
@@ -139,14 +162,7 @@
         <service id="import_product_bundle.observer.bundle.option.value.update" class="TechDivision\Import\Product\Bundle\Observers\BundleOptionValueUpdateObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
         </service>
-        <service id="import_product_bundle.observer.bundle.selection" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionObserver">
-            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
-        </service>
         <service id="import_product_bundle.observer.bundle.selection.price" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionPriceObserver">
-            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
-            <argument type="service" id="import.observer.dynamic.attribute.loader"/>
-        </service>
-        <service id="import_product_bundle.observer.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Observers\BundleSelectionUpdateObserver">
             <argument type="service" id="import_product_bundle.processor.product.bundle"/>
             <argument type="service" id="import.observer.dynamic.attribute.loader"/>
         </service>

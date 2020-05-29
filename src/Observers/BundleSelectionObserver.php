@@ -20,15 +20,17 @@
 
 namespace TechDivision\Import\Product\Bundle\Observers;
 
+use TechDivision\Import\Utils\EntityStatus;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
 use TechDivision\Import\Observers\AttributeLoaderInterface;
 use TechDivision\Import\Observers\DynamicAttributeObserverInterface;
-use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
+use TechDivision\Import\Observers\EntityMergers\EntityMergerInterface;
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 use TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes;
+use TechDivision\Import\Product\Observers\AbstractProductImportObserver;
 use TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface;
 
 /**
@@ -58,6 +60,13 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
     protected $attributeLoader;
 
     /**
+     * The entity merger instance.
+     *
+     * @var \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface
+     */
+    protected $entityMerger;
+
+    /**
      * Initialize the "dymanmic" columns.
      *
      * @var array
@@ -70,35 +79,24 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
     );
 
     /**
-     * Array with virtual column name mappings (this is a temporary
-     * solution till techdivision/import#179 as been implemented).
-     *
-     * @var array
-     * @todo https://github.com/techdivision/import/issues/179
-     */
-    protected $virtualMapping = array(
-        MemberNames::POSITION                 => ColumnKeys::BUNDLE_VALUE_SELECTION_POSITION,
-        MemberNames::IS_DEFAULT               => ColumnKeys::BUNDLE_VALUE_DEFAULT,
-        MemberNames::SELECTION_PRICE_VALUE    => ColumnKeys::BUNDLE_VALUE_PRICE,
-        MemberNames::SELECTION_CAN_CHANGE_QTY => ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY
-    );
-
-    /**
      * Initialize the observer with the passed product bundle processor instance.
      *
      * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productBundleProcessor The product bundle processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null                 $attributeLoader        The attribute loader instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface           $entityMerger           The entity merger instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null                   $stateDetector          The state detector instance
      */
     public function __construct(
         ProductBundleProcessorInterface $productBundleProcessor,
         AttributeLoaderInterface $attributeLoader = null,
+        EntityMergerInterface $entityMerger = null,
         StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the product bundle processor and the attribute loader instance
         $this->productBundleProcessor = $productBundleProcessor;
         $this->attributeLoader = $attributeLoader;
+        $this->entityMerger = $entityMerger;
 
         // pass the state detector to the parent method
         parent::__construct($stateDetector);
@@ -112,19 +110,6 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
     protected function getProductBundleProcessor()
     {
         return $this->productBundleProcessor;
-    }
-
-    /**
-     * Query whether or not a value for the column with the passed name exists.
-     *
-     * @param string $name The column name to query for a valid value
-     *
-     * @return boolean TRUE if the value is set, else FALSE
-     * @todo https://github.com/techdivision/import/issues/179
-     */
-    public function hasValue($name)
-    {
-        return parent::hasValue(isset($this->virtualMapping[$name]) ? $this->virtualMapping[$name] : $name);
     }
 
     /**
@@ -207,6 +192,26 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
                     MemberNames::SELECTION_PRICE_TYPE => $selectionPriceType
                 )
             )
+        );
+    }
+
+    /**
+     * Merge's and return's the entity with the passed attributes and set's the
+     * passed status.
+     *
+     * @param array       $entity        The entity to merge the attributes into
+     * @param array       $attr          The attributes to be merged
+     * @param string|null $changeSetName The change set name to use
+     *
+     * @return array The merged entity
+     * @todo https://github.com/techdivision/import/issues/179
+     */
+    protected function mergeEntity(array $entity, array $attr, $changeSetName = null)
+    {
+        return array_merge(
+            $entity,
+            $this->entityMerger ? $this->entityMerger->merge($this, $entity, $attr) : $attr,
+            array(EntityStatus::MEMBER_NAME => $this->detectState($entity, $attr, $changeSetName))
         );
     }
 
