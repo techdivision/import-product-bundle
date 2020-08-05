@@ -42,119 +42,93 @@ class SqlStatementRepository extends \TechDivision\Import\Product\Repositories\S
     private $statements = array(
         SqlStatementKeys::BUNDLE_OPTION =>
             'SELECT t0.*
-               FROM catalog_product_bundle_option t0
-         INNER JOIN catalog_product_bundle_option_value t1
+               FROM ${table:catalog_product_bundle_option} t0
+         INNER JOIN ${table:catalog_product_bundle_option_value} t1
                  ON t0.parent_id = :parent_id
                 AND t0.option_id = t1.option_id
                 AND t1.title = :title
                 AND t1.store_id = :store_id',
         SqlStatementKeys::BUNDLE_OPTION_VALUE =>
             'SELECT t0.*
-               FROM catalog_product_bundle_option_value t0
-         INNER JOIN catalog_product_bundle_option t1
+               FROM ${table:catalog_product_bundle_option_value} t0
+         INNER JOIN ${table:catalog_product_bundle_option} t1
                  ON t1.parent_id = :parent_id
                 AND t0.option_id = t1.option_id
                 AND t0.title = :title
                 AND t0.store_id = :store_id',
         SqlStatementKeys::BUNDLE_SELECTION =>
             'SELECT *
-               FROM catalog_product_bundle_selection
+               FROM ${table:catalog_product_bundle_selection}
               WHERE option_id = :option_id
                 AND parent_product_id = :parent_product_id
                 AND product_id = :product_id',
         SqlStatementKeys::BUNDLE_SELECTION_PRICE =>
             'SELECT *
-               FROM catalog_product_bundle_selection_price
+               FROM ${table:catalog_product_bundle_selection_price}
               WHERE selection_id = :selection_id
+                AND parent_product_id = :parent_product_id
                 AND website_id = :website_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION =>
-            'INSERT
-               INTO catalog_product_bundle_option
-                    (parent_id,
-                     required,
-                     position,
-                     type)
-             VALUES (:parent_id,
-                     :required,
-                     :position,
-                     :type)',
+            'INSERT ${table:catalog_product_bundle_option}
+                    (${column-names:catalog_product_bundle_option})
+             VALUES (${column-placeholders:catalog_product_bundle_option})',
         SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_OPTION =>
-            'UPDATE catalog_product_bundle_option
-                SET parent_id = :parent_id,
-                    required = :required,
-                    position = :position,
-                    type = :type
+            'UPDATE ${table:catalog_product_bundle_option}
+                SET ${column-values:catalog_product_bundle_option}
               WHERE option_id = :option_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION_VALUE =>
             'INSERT
-               INTO catalog_product_bundle_option_value
+               INTO ${table:catalog_product_bundle_option_value}
                     (option_id,
+                     parent_product_id,
                      store_id,
                      title)
              VALUES (:option_id,
+                     :parent_product_id,
                      :store_id,
                      :title)',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION =>
-            'INSERT
-               INTO catalog_product_bundle_selection
-                    (option_id,
-                     parent_product_id,
-                     product_id,
-                     position,
-                     is_default,
-                     selection_price_type,
-                     selection_price_value,
-                     selection_qty,
-                     selection_can_change_qty)
-             VALUES (:option_id,
-                     :parent_product_id,
-                     :product_id,
-                     :position,
-                     :is_default,
-                     :selection_price_type,
-                     :selection_price_value,
-                     :selection_qty,
-                     :selection_can_change_qty)',
+            'INSERT ${table:catalog_product_bundle_selection}
+                    (${column-names:catalog_product_bundle_selection})
+             VALUES (${column-placeholders:catalog_product_bundle_selection})',
         SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION =>
-            'UPDATE catalog_product_bundle_selection
-                SET option_id = :option_id,
-                    parent_product_id = :parent_product_id,
-                    product_id = :product_id,
-                    position = :position,
-                    is_default = :is_default,
-                    selection_price_type = :selection_price_type,
-                    selection_price_value = :selection_price_value,
-                    selection_qty = :selection_qty,
-                    selection_can_change_qty = :selection_can_change_qty
+            'UPDATE ${table:catalog_product_bundle_selection}
+                SET ${column-values:catalog_product_bundle_selection}
               WHERE selection_id = :selection_id',
         SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE =>
             'INSERT
-               INTO catalog_product_bundle_selection_price
+               INTO ${table:catalog_product_bundle_selection_price}
                     (selection_id,
+                     parent_product_id,
                      website_id,
                      selection_price_type,
                      selection_price_value)
              VALUES (:selection_id,
+                     :parent_product_id,
                      :website_id,
                      :selection_price_type,
                      :selection_price_value)',
         SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION_PRICE =>
-            'UPDATE catalog_product_bundle_selection_price
+            'UPDATE ${table:catalog_product_bundle_selection_price}
                 SET selection_price_type = :selection_price_type,
                     selection_price_value = :selection_price_value
               WHERE selection_id = :selection_id
-                AND website_id = :website_id'
+                AND website_id = :website_id
+                AND parent_product_id = :parent_product_id'
     );
 
     /**
-     * Initialize the the SQL statements.
+     * Initializes the SQL statement repository with the primary key and table prefix utility.
+     *
+     * @param \IteratorAggregate<\TechDivision\Import\Utils\SqlCompilerInterface> $compilers The array with the compiler instances
      */
-    public function __construct()
+    public function __construct(\IteratorAggregate $compilers)
     {
 
-        // merge the class statements
-        foreach ($this->statements as $key => $statement) {
-            $this->preparedStatements[$key] = $statement;
-        }
+        // pass primary key + table prefix utility to parent instance
+        parent::__construct($compilers);
+
+        // compile the SQL statements
+        $this->compile($this->statements);
     }
 }

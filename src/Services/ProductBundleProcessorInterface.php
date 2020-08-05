@@ -21,6 +21,7 @@
 namespace TechDivision\Import\Product\Bundle\Services;
 
 use TechDivision\Import\Product\Services\ProductProcessorInterface;
+use TechDivision\Import\Product\Services\ProductRelationAwareProcessorInterface;
 
 /**
  * Interface for product bundle processor implementations.
@@ -31,34 +32,41 @@ use TechDivision\Import\Product\Services\ProductProcessorInterface;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-interface ProductBundleProcessorInterface extends ProductProcessorInterface
+interface ProductBundleProcessorInterface extends ProductProcessorInterface, ProductRelationAwareProcessorInterface
 {
+
+    /**
+     * Return's the raw entity loader instance.
+     *
+     * @return \TechDivision\Import\Loaders\LoaderInterface The raw entity loader instance
+     */
+    public function getRawEntityLoader();
 
     /**
      * Return's the action with the product bundle option CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getProductBundleOptionAction();
 
     /**
      * Return's the action with the product bundle option value CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleOptionValueActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getProductBundleOptionValueAction();
 
     /**
      * Return's the action with the product bundle selection CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getProductBundleSelectionAction();
 
     /**
      * Return's the action with the product bundle selection price CRUD methods.
      *
-     * @return \TechDivision\Import\Product\Bundle\Actions\ProductBundleSelectionPriceActionInterface The action instance
+     * @return \TechDivision\Import\Actions\ActionInterface The action instance
      */
     public function getProductBundleSelectionPriceAction();
 
@@ -89,6 +97,16 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
      * @return \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepositoryInterface The repository instance
      */
     public function getBundleSelectionPriceRepository();
+
+    /**
+     * Load's and return's a raw entity without primary key but the mandatory members only and nulled values.
+     *
+     * @param string $entityTypeCode The entity type code to return the raw entity for
+     * @param array  $data           An array with data that will be used to initialize the raw entity with
+     *
+     * @return array The initialized entity
+     */
+    public function loadRawEntity($entityTypeCode, array $data = array());
 
     /**
      * Load's the bundle option with the passed name, store + parent ID.
@@ -124,14 +142,15 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface
     public function loadBundleSelection($optionId, $productId, $parentProductId);
 
     /**
-     * Load's the bundle selection price with the passed selection/website ID.
+     * Load's the bundle selection price with the passed selection/parent product/website ID.
      *
-     * @param integer $selectionId The selection ID of the bundle selection price to be returned
-     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     * @param integer $selectionId     The selection ID of the bundle selection price to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection price to be returned
+     * @param integer $websiteId       The website ID of the bundle selection price to be returned
      *
      * @return array The bundle selection price
      */
-    public function loadBundleSelectionPrice($selectionId, $websiteId);
+    public function loadBundleSelectionPrice($selectionId, $parentProductId, $websiteId);
 
     /**
      * Persist's the passed product bundle option data and return's the ID.

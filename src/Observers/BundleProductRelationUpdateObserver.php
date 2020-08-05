@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleSelectionPriceAction
+ * TechDivision\Import\Product\Bundle\Observers\BundleProductRelationUpdateObserver
  *
  * NOTICE OF LICENSE
  *
@@ -18,12 +18,13 @@
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Bundle\Actions;
+namespace TechDivision\Import\Product\Bundle\Observers;
 
-use TechDivision\Import\Actions\AbstractAction;
+use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
+use TechDivision\Import\Product\Observers\AbstractProductRelationUpdateObserver;
 
 /**
- * An action implementation that provides functionality for product bundle selection price CRUD actions.
+ * Oberserver that provides functionality for the bundle product relation add/update operation.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
  * @copyright 2016 TechDivision GmbH <info@techdivision.com>
@@ -31,19 +32,26 @@ use TechDivision\Import\Actions\AbstractAction;
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleSelectionPriceAction extends AbstractAction implements ProductBundleSelectionPriceActionInterface
+class BundleProductRelationUpdateObserver extends AbstractProductRelationUpdateObserver
 {
 
     /**
-     * Creates's the entity with the passed attributes.
+     * Returns the column name with the parent SKU.
      *
-     * @param array       $row  The attributes of the entity to create
-     * @param string|null $name The name of the prepared statement that has to be executed
-     *
-     * @return string The last inserted ID
+     * @return string The column name with the parent SKU
      */
-    public function create($row, $name = null)
+    protected function getParentSkuColumnName()
     {
-        return $this->getCreateProcessor()->execute($row, $name);
+        return ColumnKeys::BUNDLE_PARENT_SKU;
+    }
+
+    /**
+     * Returns the column name with the child SKU.
+     *
+     * @return string The column name with the child SKU
+     */
+    protected function getChildSkuColumnName()
+    {
+        return ColumnKeys::BUNDLE_VALUE_SKU;
     }
 }

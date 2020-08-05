@@ -54,6 +54,13 @@ class ColumnKeys extends \TechDivision\Import\Product\Utils\ColumnKeys
     const BUNDLE_VALUES = 'bundle_values';
 
     /**
+     * Name for the column 'bundle_values_position'.
+     *
+     * @var string
+     */
+    const BUNDLE_VALUES_POSITION = 'bundle_values_position';
+
+    /**
      * Name for the column 'bundle_price_type'.
      *
      * @var string
@@ -150,4 +157,25 @@ class ColumnKeys extends \TechDivision\Import\Product\Utils\ColumnKeys
      * @var string
      */
     const BUNDLE_VALUE_PRICE_TYPE = 'bundle_value_price_type';
+
+    /**
+     * Name for the column 'bundle_value_can_change_qty'.
+     *
+     * @var string
+     */
+    const BUNDLE_VALUE_CAN_CHANGE_QTY = 'bundle_value_can_change_qty';
+
+    /**
+     * Name for the column 'bundle_value_position'.
+     *
+     * @var string
+     */
+    const BUNDLE_VALUE_POSITION = 'bundle_value_position';
+
+    /**
+     * Name for the column 'bundle_value_selection_position'.
+     *
+     * @var string
+     */
+    const BUNDLE_VALUE_SELECTION_POSITION = 'bundle_value_selection_position';
 }

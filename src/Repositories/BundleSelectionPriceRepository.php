@@ -57,20 +57,22 @@ class BundleSelectionPriceRepository extends AbstractRepository implements Bundl
     }
 
     /**
-     * Load's the bundle selection price with the passed selection/website ID.
+     * Load's the bundle selection price with the passed selection/parent product/website ID.
      *
-     * @param integer $selectionId The selection ID of the bundle selection price to be returned
-     * @param integer $websiteId   The website ID of the bundle selection price to be returned
+     * @param integer $selectionId     The selection ID of the bundle selection price to be returned
+     * @param integer $parentProductId The parent product ID of the bundle selection price to be returned
+     * @param integer $websiteId       The website ID of the bundle selection price to be returned
      *
      * @return array The bundle selection price
      */
-    public function findOneByOptionIdAndProductIdAndParentProductId($selectionId, $websiteId)
+    public function findOneByOptionIdAndProductIdAndParentProductId($selectionId, $parentProductId, $websiteId)
     {
 
         // initialize the params
         $params = array(
-            MemberNames::SELECTION_ID => $selectionId,
-            MemberNames::WEBSITE_ID   => $websiteId
+            MemberNames::SELECTION_ID      => $selectionId,
+            MemberNames::PARENT_PRODUCT_ID => $parentProductId,
+            MemberNames::WEBSITE_ID        => $websiteId
         );
 
         // load and return the bundle option with the passed selection/website ID

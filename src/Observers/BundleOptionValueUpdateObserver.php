@@ -76,19 +76,6 @@ class BundleOptionValueUpdateObserver extends BundleOptionValueObserver
     }
 
     /**
-     * Return the entity ID for the passed SKU.
-     *
-     * @param string $sku The SKU to return the entity ID for
-     *
-     * @return integer The mapped entity ID
-     * @throws \Exception Is thrown if the SKU is not mapped yet
-     */
-    protected function mapSku($sku)
-    {
-        return $this->getSubject()->mapSkuToEntityId($sku);
-    }
-
-    /**
      * Return's the store ID of the actual row, or of the default store
      * if no store view code is set in the CSV file.
      *

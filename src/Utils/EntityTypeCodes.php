@@ -1,7 +1,7 @@
 <?php
 
 /**
- * TechDivision\Import\Product\Bundle\Repositories\ProductBundleOptionValueAction
+ * TechDivision\Import\Product\Bundle\Utils\EntityTypeCodes
  *
  * NOTICE OF LICENSE
  *
@@ -12,25 +12,37 @@
  * PHP version 5
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2020 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
 
-namespace TechDivision\Import\Product\Bundle\Actions;
-
-use TechDivision\Import\Actions\AbstractAction;
+namespace TechDivision\Import\Product\Bundle\Utils;
 
 /**
- * An action implementation that provides functionality for product bundle option value CRUD actions.
+ * Utility class containing the entity type codes.
  *
  * @author    Tim Wagner <t.wagner@techdivision.com>
- * @copyright 2016 TechDivision GmbH <info@techdivision.com>
+ * @copyright 2020 TechDivision GmbH <info@techdivision.com>
  * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  * @link      https://github.com/techdivision/import-product-bundle
  * @link      http://www.techdivision.com
  */
-class ProductBundleOptionValueAction extends AbstractAction implements ProductBundleOptionValueActionInterface
+class EntityTypeCodes extends \TechDivision\Import\Utils\EntityTypeCodes
 {
+
+    /**
+     * Key for the product entity 'catalog_product_bundle_option'.
+     *
+     * @var string
+     */
+    const CATALOG_PRODUCT_BUNDLE_OPTION = 'catalog_product_bundle_option';
+
+    /**
+     * Key for the product entity 'catalog_product_bundle_selection'.
+     *
+     * @var string
+     */
+    const CATALOG_PRODUCT_BUNDLE_SELECTION = 'catalog_product_bundle_selection';
 }

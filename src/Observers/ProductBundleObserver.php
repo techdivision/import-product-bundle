@@ -48,14 +48,17 @@ class ProductBundleObserver extends AbstractProductImportObserver
      * @var array
      */
     protected $columns = array(
-        'name'        => ColumnKeys::BUNDLE_VALUE_NAME,
-        'type'        => ColumnKeys::BUNDLE_VALUE_TYPE,
-        'required'    => ColumnKeys::BUNDLE_VALUE_REQUIRED,
-        'sku'         => ColumnKeys::BUNDLE_VALUE_SKU,
-        'price'       => ColumnKeys::BUNDLE_VALUE_PRICE,
-        'default'     => ColumnKeys::BUNDLE_VALUE_DEFAULT,
-        'default_qty' => ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY,
-        'price_type'  => ColumnKeys::BUNDLE_VALUE_PRICE_TYPE
+        'name'               => array(ColumnKeys::BUNDLE_VALUE_NAME, ColumnKeys::BUNDLE_VALUES),
+        'type'               => array(ColumnKeys::BUNDLE_VALUE_TYPE, ColumnKeys::BUNDLE_VALUES),
+        'required'           => array(ColumnKeys::BUNDLE_VALUE_REQUIRED, ColumnKeys::BUNDLE_VALUES),
+        'sku'                => array(ColumnKeys::BUNDLE_VALUE_SKU, ColumnKeys::BUNDLE_VALUES),
+        'price'              => array(ColumnKeys::BUNDLE_VALUE_PRICE, ColumnKeys::BUNDLE_VALUES),
+        'default'            => array(ColumnKeys::BUNDLE_VALUE_DEFAULT, ColumnKeys::BUNDLE_VALUES),
+        'default_qty'        => array(ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY, ColumnKeys::BUNDLE_VALUES),
+        'price_type'         => array(ColumnKeys::BUNDLE_VALUE_PRICE_TYPE, ColumnKeys::BUNDLE_VALUES),
+        'can_change_qty'     => array(ColumnKeys::BUNDLE_VALUE_CAN_CHANGE_QTY, ColumnKeys::BUNDLE_VALUES),
+        'position'           => array(ColumnKeys::BUNDLE_VALUE_POSITION, ColumnKeys::BUNDLE_VALUES),
+        'selection_position' => array(ColumnKeys::BUNDLE_VALUE_SELECTION_POSITION, ColumnKeys::BUNDLE_VALUES)
     );
 
     /**
@@ -79,52 +82,85 @@ class ProductBundleObserver extends AbstractProductImportObserver
             // load the parent SKU from the row
             $parentSku = $this->getValue(ColumnKeys::SKU);
 
+            // explode the positions of the bundle values
+            $bundleValuesPosition = $this->getValue(ColumnKeys::BUNDLE_VALUES_POSITION, array(), function ($value) {
+                return $this->explode($value, $this->getMultipleFieldDelimiter());
+            });
+
             // initialize the bundle with the found values
-            foreach ($this->explode($bundleValues, '|') as $bundleValue) {
-                // initialize the product bundle itself
-                $bundle = $this->newArtefact(
-                    array(
-                        ColumnKeys::BUNDLE_PARENT_SKU    => $parentSku,
-                        ColumnKeys::STORE_VIEW_CODE      => $this->getValue(ColumnKeys::STORE_VIEW_CODE),
-                        ColumnKeys::BUNDLE_SKU_TYPE      => $this->getValue(ColumnKeys::BUNDLE_SKU_TYPE),
-                        ColumnKeys::BUNDLE_PRICE_TYPE    => $this->getValue(ColumnKeys::BUNDLE_PRICE_TYPE),
-                        ColumnKeys::BUNDLE_PRICE_VIEW    => $this->getValue(ColumnKeys::BUNDLE_PRICE_VIEW),
-                        ColumnKeys::BUNDLE_WEIGHT_TYPE   => $this->getValue(ColumnKeys::BUNDLE_WEIGHT_TYPE),
-                        ColumnKeys::BUNDLE_SHIPMENT_TYPE => $this->getValue(ColumnKeys::BUNDLE_SHIPMENT_TYPE),
-                    ),
-                    array(
-                        ColumnKeys::BUNDLE_PARENT_SKU        => ColumnKeys::SKU,
-                        ColumnKeys::STORE_VIEW_CODE          => ColumnKeys::STORE_VIEW_CODE,
-                        ColumnKeys::BUNDLE_SKU_TYPE          => ColumnKeys::BUNDLE_SKU_TYPE,
-                        ColumnKeys::BUNDLE_PRICE_TYPE        => ColumnKeys::BUNDLE_PRICE_TYPE,
-                        ColumnKeys::BUNDLE_PRICE_VIEW        => ColumnKeys::BUNDLE_PRICE_VIEW,
-                        ColumnKeys::BUNDLE_WEIGHT_TYPE       => ColumnKeys::BUNDLE_WEIGHT_TYPE,
-                        ColumnKeys::BUNDLE_SHIPMENT_TYPE     => ColumnKeys::BUNDLE_SHIPMENT_TYPE,
-                        ColumnKeys::BUNDLE_VALUE_NAME        => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_TYPE        => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_REQUIRED    => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_SKU         => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_PRICE       => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_DEFAULT     => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_DEFAULT_QTY => ColumnKeys::BUNDLE_VALUES,
-                        ColumnKeys::BUNDLE_VALUE_PRICE_TYPE  => ColumnKeys::BUNDLE_VALUES
-                    )
+            foreach ($this->explode($bundleValues, $this->getMultipleValueDelimiter()) as $bundleValue) {
+                // initialize the array with the columns
+                $columns = array(
+                    ColumnKeys::BUNDLE_PARENT_SKU    => $parentSku,
+                    ColumnKeys::STORE_VIEW_CODE      => $this->getValue(ColumnKeys::STORE_VIEW_CODE),
+                    ColumnKeys::BUNDLE_SKU_TYPE      => $this->getValue(ColumnKeys::BUNDLE_SKU_TYPE),
+                    ColumnKeys::BUNDLE_PRICE_TYPE    => $this->getValue(ColumnKeys::BUNDLE_PRICE_TYPE),
+                    ColumnKeys::BUNDLE_PRICE_VIEW    => $this->getValue(ColumnKeys::BUNDLE_PRICE_VIEW),
+                    ColumnKeys::BUNDLE_WEIGHT_TYPE   => $this->getValue(ColumnKeys::BUNDLE_WEIGHT_TYPE),
+                    ColumnKeys::BUNDLE_SHIPMENT_TYPE => $this->getValue(ColumnKeys::BUNDLE_SHIPMENT_TYPE),
+                );
+
+                // initialize the array with the original column names
+                $originalColumNames = array(
+                    ColumnKeys::BUNDLE_PARENT_SKU    => ColumnKeys::SKU,
+                    ColumnKeys::STORE_VIEW_CODE      => ColumnKeys::STORE_VIEW_CODE,
+                    ColumnKeys::BUNDLE_SKU_TYPE      => ColumnKeys::BUNDLE_SKU_TYPE,
+                    ColumnKeys::BUNDLE_PRICE_TYPE    => ColumnKeys::BUNDLE_PRICE_TYPE,
+                    ColumnKeys::BUNDLE_PRICE_VIEW    => ColumnKeys::BUNDLE_PRICE_VIEW,
+                    ColumnKeys::BUNDLE_WEIGHT_TYPE   => ColumnKeys::BUNDLE_WEIGHT_TYPE,
+                    ColumnKeys::BUNDLE_SHIPMENT_TYPE => ColumnKeys::BUNDLE_SHIPMENT_TYPE
                 );
 
                 // initialize the columns
-                foreach ($this->columns as $columnKey) {
-                    $bundle[$columnKey] = null;
+                foreach ($this->columns as $column) {
+                    // initialize column/original column name
+                    $columnName = $originalColumName = null;
+                    // explode the column and originl column name
+                    if (sizeof($column) > 1) {
+                        list ($columnName, $originalColumName) = $column;
+                    }
+                    // initialize the column
+                    $columns[$columnName] = null;
+                    // initialize the original column name
+                    $originalColumNames[$columnName] = $originalColumName;
                 }
 
-                // set the values
-                $values = array();
-                foreach (explode(',', $bundleValue) as $values) {
-                    list ($key, $value) = explode('=', $values);
-                    $bundle[$this->columns[$key]] = $value;
+                // explode the values
+                $explodedValues = $this->explode($bundleValue, $this->getMultipleFieldDelimiter());
+
+                // iterate over the given values and append them to the columns
+                foreach ($explodedValues as $values) {
+                    // initialize key/value
+                    $key = $value = null;
+                    // extract the column key => value pair
+                    if (strpos($values, '=')) {
+                        list ($key, $value) = $this->explode($values, '=');
+                    }
+                    // query whether or not we've to append the column
+                    if (isset($this->columns[$key])) {
+                        // explode the column name
+                        list ($columnName, ) = $this->columns[$key];
+                        // add the value
+                        $columns[$columnName] = $value;
+                    }
                 }
 
-                // prepare and append the bundle data
-                $artefacts[] = $bundle;
+                // iterate over the positions
+                foreach ($bundleValuesPosition as $position) {
+                    // initialize name/value
+                    $name = $value = null;
+                    // extract the column name => value pair
+                    if (strpos($position, '=')) {
+                        list ($name, $value) = $this->explode($position, '=');
+                    }
+                    // query whether or not we've to append the column
+                    if (isset($columns[ColumnKeys::BUNDLE_VALUE_NAME]) && $columns[ColumnKeys::BUNDLE_VALUE_NAME] === $name) {
+                        $columns[ColumnKeys::BUNDLE_VALUE_POSITION] = $value;
+                    }
+                }
+
+                //  initialize the product bundle itself and append it to the artefacts
+                $artefacts[] = $this->newArtefact($columns, $originalColumNames);
             }
 
             // append the bundles to the subject

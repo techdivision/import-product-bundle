@@ -104,6 +104,9 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
         $store = $this->getStoreByStoreCode($storeViewCode);
         $websiteId = $store[MemberNames::WEBSITE_ID];
 
+        // load parent/option ID
+        $parentId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
+
         // load the default values
         $selectionPriceValue = $this->getValue(ColumnKeys::BUNDLE_VALUE_PRICE);
 
@@ -125,6 +128,7 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
         return $this->initializeEntity(
             array(
                 MemberNames::SELECTION_ID          => $selectionId,
+                MemberNames::PARENT_PRODUCT_ID     => $parentId,
                 MemberNames::WEBSITE_ID            => $websiteId,
                 MemberNames::SELECTION_PRICE_TYPE  => $selectionPriceType,
                 MemberNames::SELECTION_PRICE_VALUE => $selectionPriceValue
@@ -204,5 +208,18 @@ class BundleSelectionPriceObserver extends AbstractProductImportObserver
     protected function persistProductBundleSelectionPrice($productBundleSelectionPrice)
     {
         $this->getProductBundleProcessor()->persistProductBundleSelectionPrice($productBundleSelectionPrice);
+    }
+
+    /**
+     * Return the entity ID for the passed SKU.
+     *
+     * @param string $sku The SKU to return the entity ID for
+     *
+     * @return integer The mapped entity ID
+     * @throws \Exception Is thrown if the SKU is not mapped yet
+     */
+    protected function mapSku($sku)
+    {
+        return $this->getSubject()->mapSkuToEntityId($sku);
     }
 }
