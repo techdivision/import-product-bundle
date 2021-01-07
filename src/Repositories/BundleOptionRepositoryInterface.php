@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Bundle\Repositories;
 
-use TechDivision\Import\Repositories\RepositoryInterface;
+use TechDivision\Import\Dbal\Repositories\RepositoryInterface;
 
 /**
  * Interface for repository implementations to load bundle option data.
