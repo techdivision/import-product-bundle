@@ -90,22 +90,22 @@
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
 
-        <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.update"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.delete" on-invalid="ignore"/>
             <argument type="constant">TechDivision\Import\Product\Bundle\Utils\MemberNames::OPTION_ID</argument>
         </service>
-        <service id="import_product_bundle.action.product.bundle.selection" class="TechDivision\Import\Dbal\Actions\GenericIdentifierAction">
+        <service id="import_product_bundle.action.product.bundle.selection" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.update"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.delete" on-invalid="ignore"/>
             <argument type="constant">TechDivision\Import\Product\Bundle\Utils\MemberNames::SELECTION_ID</argument>
         </service>
-        <service id="import_product_bundle.action.product.bundle.option.value" class="TechDivision\Import\Dbal\Actions\GenericAction">
+        <service id="import_product_bundle.action.product.bundle.option.value" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.value.create"/>
         </service>
-        <service id="import_product_bundle.action.product.bundle.selection.price" class="TechDivision\Import\Dbal\Actions\GenericAction">
+        <service id="import_product_bundle.action.product.bundle.selection.price" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.update"/>
         </service>
