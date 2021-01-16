@@ -45,28 +45,28 @@ interface ProductBundleProcessorInterface extends ProductProcessorInterface, Pro
     /**
      * Return's the action with the product bundle option CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleOptionAction();
 
     /**
      * Return's the action with the product bundle option value CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleOptionValueAction();
 
     /**
      * Return's the action with the product bundle selection CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleSelectionAction();
 
     /**
      * Return's the action with the product bundle selection price CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleSelectionPriceAction();
 

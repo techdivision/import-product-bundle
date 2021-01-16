@@ -57,55 +57,82 @@
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
         </service>
 
-        <service id="import_product_bundle.action.processor.product.bundle.option.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionCreateProcessor">
+        <!--
+         | The DI action processor configuration
+         |-->
+        <service id="import_product_bundle.action.processor.product.bundle.option.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION</argument>
+            </argument>
         </service>
-        <service id="import_product_bundle.action.processor.product.bundle.option.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionUpdateProcessor">
+        <service id="import_product_bundle.action.processor.product.bundle.option.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_OPTION</argument>
+            </argument>
         </service>
-        <service id="import_product_bundle.action.processor.product.bundle.selection.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionCreateProcessor">
+        <service id="import_product_bundle.action.processor.product.bundle.selection.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION</argument>
+            </argument>
         </service>
-        <service id="import_product_bundle.action.processor.product.bundle.selection.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionUpdateProcessor">
+        <service id="import_product_bundle.action.processor.product.bundle.selection.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericIdentifierProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
             <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION</argument>
+            </argument>
         </service>
-        <service id="import_product_bundle.action.processor.product.bundle.option.value.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleOptionValueCreateProcessor">
+        <service id="import_product_bundle.action.processor.product.bundle.option.value.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::CREATE_PRODUCT_BUNDLE_OPTION_VALUE</argument>
+            </argument>
         </service>
-        <service id="import_product_bundle.action.processor.product.bundle.selection.price.create" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionPriceCreateProcessor">
+        <service id="import_product_bundle.action.processor.product.bundle.selection.price.create" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::CREATE_PRODUCT_BUNDLE_SELECTION_PRICE</argument>
+            </argument>
         </service>
-        <service id="import_product_bundle.action.processor.product.bundle.selection.price.update" class="TechDivision\Import\Product\Bundle\Actions\Processors\ProductBundleSelectionPriceUpdateProcessor">
+        <service id="import_product_bundle.action.processor.product.bundle.selection.price.update" class="TechDivision\Import\Dbal\Collection\Actions\Processors\GenericProcessor">
             <argument type="service" id="connection"/>
             <argument type="service" id="import_product_bundle.repository.sql.statement"/>
+            <argument type="service" id="import.util.sql.sanitizers"/>
+            <argument type="collection">
+                <argument type="constant">TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys::UPDATE_PRODUCT_BUNDLE_SELECTION_PRICE</argument>
+            </argument>
         </service>
 
-        <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Actions\GenericIdentifierAction">
+        <service id="import_product_bundle.action.product.bundle.option" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.update"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.delete" on-invalid="ignore"/>
             <argument type="constant">TechDivision\Import\Product\Bundle\Utils\MemberNames::OPTION_ID</argument>
         </service>
-        <service id="import_product_bundle.action.product.bundle.selection" class="TechDivision\Import\Actions\GenericIdentifierAction">
+        <service id="import_product_bundle.action.product.bundle.selection" class="TechDivision\Import\Dbal\Collection\Actions\GenericIdentifierAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.update"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.delete" on-invalid="ignore"/>
             <argument type="constant">TechDivision\Import\Product\Bundle\Utils\MemberNames::SELECTION_ID</argument>
         </service>
-        <service id="import_product_bundle.action.product.bundle.option.value" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product_bundle.action.product.bundle.option.value" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.option.value.create"/>
         </service>
-        <service id="import_product_bundle.action.product.bundle.selection.price" class="TechDivision\Import\Actions\GenericAction">
+        <service id="import_product_bundle.action.product.bundle.selection.price" class="TechDivision\Import\Dbal\Collection\Actions\GenericAction">
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.create"/>
             <argument type="service" id="import_product_bundle.action.processor.product.bundle.selection.price.update"/>
         </service>

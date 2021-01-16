@@ -20,7 +20,7 @@
 
 namespace TechDivision\Import\Product\Bundle\Repositories;
 
-use TechDivision\Import\Repositories\AbstractRepository;
+use TechDivision\Import\Dbal\Collection\Repositories\AbstractRepository;
 use TechDivision\Import\Product\Bundle\Utils\MemberNames;
 use TechDivision\Import\Product\Bundle\Utils\SqlStatementKeys;
 

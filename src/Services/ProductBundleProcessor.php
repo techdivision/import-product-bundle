@@ -21,8 +21,8 @@
 namespace TechDivision\Import\Product\Bundle\Services;
 
 use TechDivision\Import\Loaders\LoaderInterface;
-use TechDivision\Import\Actions\ActionInterface;
-use TechDivision\Import\Connection\ConnectionInterface;
+use TechDivision\Import\Dbal\Actions\ActionInterface;
+use TechDivision\Import\Dbal\Connection\ConnectionInterface;
 use TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface;
 use TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepositoryInterface;
 use TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepositoryInterface;
@@ -44,42 +44,42 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * A PDO connection initialized with the values from the Doctrine EntityManager.
      *
-     * @var \TechDivision\Import\Connection\ConnectionInterface
+     * @var \TechDivision\Import\Dbal\Connection\ConnectionInterface
      */
     protected $connection;
 
     /**
      * The action for product bundle option CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productBundleOptionAction;
 
     /**
      * The action for product bundle option value CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productBundleOptionValueAction;
 
     /**
      * The action for product bundle selection CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productBundleSelectionAction;
 
     /**
      * The action for product bundle selection price CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productBundleSelectionPriceAction;
 
     /**
      * The action for product relation CRUD methods.
      *
-     * @var \TechDivision\Import\Actions\ActionInterface
+     * @var \TechDivision\Import\Dbal\Actions\ActionInterface
      */
     protected $productRelationAction;
 
@@ -128,17 +128,17 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Initialize the processor with the necessary assembler and repository instances.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface                                      $connection                        The connection to use
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface                                 $connection                        The connection to use
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionRepositoryInterface         $bundleOptionRepository            The bundle option repository to use
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleOptionValueRepositoryInterface    $bundleOptionValueRepository       The bundle option value repository to use
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionRepositoryInterface      $bundleSelectionRepository         The bundle selection repository to use
      * @param \TechDivision\Import\Product\Bundle\Repositories\BundleSelectionPriceRepositoryInterface $bundleSelectionPriceRepository    The bundle selection price repository to use
      * @param \TechDivision\Import\Product\Repositories\ProductRelationRepositoryInterface             $productRelationRepository         The product relation repository to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                             $productBundleOptionAction         The product bundle option action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                             $productBundleOptionValueAction    The product bundle option value action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                             $productBundleSelectionAction      The product bundle selection action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                             $productBundleSelectionPriceAction The product bundle selection price action to use
-     * @param \TechDivision\Import\Actions\ActionInterface                                             $productRelationAction             The product relation action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                                        $productBundleOptionAction         The product bundle option action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                                        $productBundleOptionValueAction    The product bundle option value action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                                        $productBundleSelectionAction      The product bundle selection action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                                        $productBundleSelectionPriceAction The product bundle selection price action to use
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface                                        $productRelationAction             The product relation action to use
      * @param \TechDivision\Import\Loaders\LoaderInterface                                             $rawEntityLoader                   The raw entity loader instance
      */
     public function __construct(
@@ -194,7 +194,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the passed connection.
      *
-     * @param \TechDivision\Import\Connection\ConnectionInterface $connection The connection to set
+     * @param \TechDivision\Import\Dbal\Connection\ConnectionInterface $connection The connection to set
      *
      * @return void
      */
@@ -206,7 +206,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the connection.
      *
-     * @return \TechDivision\Import\Connection\ConnectionInterface The connection instance
+     * @return \TechDivision\Import\Dbal\Connection\ConnectionInterface The connection instance
      */
     public function getConnection()
     {
@@ -260,7 +260,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the action with the product bundle option CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $productBundleOptionAction The action with the product bundle option CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $productBundleOptionAction The action with the product bundle option CRUD methods
      *
      * @return void
      */
@@ -272,7 +272,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the action with the product bundle option CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleOptionAction()
     {
@@ -282,7 +282,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the action with the product bundle option value CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $productBundleOptionValueAction The action with the product bundle option value CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $productBundleOptionValueAction The action with the product bundle option value CRUD methods
      *
      * @return void
      */
@@ -294,7 +294,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the action with the product bundle option value CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleOptionValueAction()
     {
@@ -304,7 +304,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the action with the product bundle selection CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $productBundleSelectionAction The action with the product bundle selection CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $productBundleSelectionAction The action with the product bundle selection CRUD methods
      *
      * @return void
      */
@@ -316,7 +316,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the action with the product bundle selection CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleSelectionAction()
     {
@@ -326,7 +326,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the action with the product bundle selection price CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $productBundleSelectionPriceAction The action with the product bundle selection price CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $productBundleSelectionPriceAction The action with the product bundle selection price CRUD methods
      *
      * @return void
      */
@@ -338,7 +338,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the action with the product bundle selection price CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductBundleSelectionPriceAction()
     {
@@ -348,7 +348,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Set's the action with the product relation CRUD methods.
      *
-     * @param \TechDivision\Import\Actions\ActionInterface $productRelationAction The action with the product relation CRUD methods
+     * @param \TechDivision\Import\Dbal\Actions\ActionInterface $productRelationAction The action with the product relation CRUD methods
      *
      * @return void
      */
@@ -360,7 +360,7 @@ class ProductBundleProcessor implements ProductBundleProcessorInterface
     /**
      * Return's the action with the product relation CRUD methods.
      *
-     * @return \TechDivision\Import\Actions\ActionInterface The action instance
+     * @return \TechDivision\Import\Dbal\Actions\ActionInterface The action instance
      */
     public function getProductRelationAction()
     {
