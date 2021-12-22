@@ -15,6 +15,7 @@
 namespace TechDivision\Import\Product\Bundle\Observers;
 
 use TechDivision\Import\Dbal\Utils\EntityStatus;
+use TechDivision\Import\Utils\RegistryKeys;
 use TechDivision\Import\Utils\StoreViewCodes;
 use TechDivision\Import\Utils\BackendTypeKeys;
 use TechDivision\Import\Observers\StateDetectorInterface;
@@ -124,7 +125,11 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
 
         // prepare, initialize and persist the product bundle selection data
         $productBundleSelection = $this->initializeBundleSelection($this->prepareDynamicAttributes());
-        $selectionId = $this->persistProductBundleSelection($productBundleSelection);
+        $selectionId = '';
+
+        if (isset($productBundleSelection[MemberNames::PRODUCT_ID])) {
+            $selectionId = $this->persistProductBundleSelection($productBundleSelection);
+        }
 
         // add the mapping for the child SKU => selection ID
         $this->addChildSkuSelectionIdMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU), $selectionId);
@@ -157,12 +162,27 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
         } catch (\Exception $e) {
             throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
         }
-
+        $childId = null;
         try {
             // try to load the child ID
             $childId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
         } catch (\Exception $e) {
-            throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_SKU), $e);
+            if (!$this->getSubject()->isStrictMode()) {
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    $this->getValue(ColumnKeys::BUNDLE_VALUE_SKU) =>  $e->getMessage()
+                                )
+                            )
+                        )
+                    )
+                );
+                $this->skipRow();
+            } else {
+                throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_SKU), $e);
+            }
         }
 
         try {

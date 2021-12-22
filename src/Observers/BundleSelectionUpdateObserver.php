@@ -15,6 +15,7 @@
 namespace TechDivision\Import\Product\Bundle\Observers;
 
 use TechDivision\Import\Product\Bundle\Utils\ColumnKeys;
+use TechDivision\Import\Utils\RegistryKeys;
 
 /**
  * Oberserver that provides functionality for the bundle selection add/update operation.
@@ -44,12 +45,28 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
         } catch (\Exception $e) {
             throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
         }
-
+        $productId = null;
         try {
             // try to load the product ID
             $productId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
         } catch (\Exception $e) {
-            throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
+            //
+            if (!$this->getSubject()->isStrictMode()) {
+                $this->mergeStatus(
+                    array(
+                        RegistryKeys::NO_STRICT_VALIDATIONS => array(
+                            basename($this->getFilename()) => array(
+                                $this->getLineNumber() => array(
+                                    $this->getValue(ColumnKeys::BUNDLE_VALUE_SKU) =>  $e->getMessage()
+                                )
+                            )
+                        )
+                    )
+                );
+                $this->skipRow();
+            } else {
+                throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_SKU), $e);
+            }
         }
 
         // load the actual option ID
