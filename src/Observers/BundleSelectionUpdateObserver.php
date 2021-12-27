@@ -57,7 +57,7 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
                             basename($this->getFilename()) => array(
                                 $this->getLineNumber() => array(
-                                    $this->getValue(ColumnKeys::BUNDLE_VALUE_SKU) =>  $e->getMessage()
+                                    ColumnKeys::BUNDLE_VALUE_SKU =>  $e->getMessage()
                                 )
                             )
                         )

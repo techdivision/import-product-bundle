@@ -162,6 +162,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
         } catch (\Exception $e) {
             throw $this->wrapException(array(ColumnKeys::BUNDLE_PARENT_SKU), $e);
         }
+
         $childId = null;
         try {
             // try to load the child ID
@@ -173,7 +174,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
                             basename($this->getFilename()) => array(
                                 $this->getLineNumber() => array(
-                                    $this->getValue(ColumnKeys::BUNDLE_VALUE_SKU) =>  $e->getMessage()
+                                  ColumnKeys::BUNDLE_VALUE_SKU =>  $e->getMessage()
                                 )
                             )
                         )
