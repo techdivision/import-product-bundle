@@ -50,8 +50,9 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
             // try to load the product ID
             $productId = $this->mapSku($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
         } catch (\Exception $e) {
-            //
             if (!$this->getSubject()->isStrictMode()) {
+                $this->getSystemLogger()
+                    ->warning($this->getSubject()->appendExceptionSuffix($e->getMessage()));
                 $this->mergeStatus(
                     array(
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(

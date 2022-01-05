@@ -169,6 +169,9 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
             $childId = $this->mapSkuToEntityId($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU));
         } catch (\Exception $e) {
             if (!$this->getSubject()->isStrictMode()) {
+                $this->getSubject()->getSystemLogger()
+                    ->warning($this->getSubject()->appendExceptionSuffix($e->getMessage()));
+
                 $this->mergeStatus(
                     array(
                         RegistryKeys::NO_STRICT_VALIDATIONS => array(
