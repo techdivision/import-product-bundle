@@ -38,7 +38,6 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
      */
     protected function initializeBundleSelection(array $attr)
     {
-
         try {
             // try to load the product bundle option SKU/ID
             $parentProductId= $this->mapSku($this->getValue(ColumnKeys::BUNDLE_PARENT_SKU));
@@ -64,7 +63,7 @@ class BundleSelectionUpdateObserver extends BundleSelectionObserver
                         )
                     )
                 );
-                $this->skipRow();
+                return [];
             } else {
                 throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_SKU), $e);
             }

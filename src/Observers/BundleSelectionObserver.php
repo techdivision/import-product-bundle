@@ -129,10 +129,9 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
 
         if (isset($productBundleSelection[MemberNames::PRODUCT_ID])) {
             $selectionId = $this->persistProductBundleSelection($productBundleSelection);
+            // add the mapping for the child SKU => selection ID
+            $this->addChildSkuSelectionIdMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU), $selectionId);
         }
-
-        // add the mapping for the child SKU => selection ID
-        $this->addChildSkuSelectionIdMapping($this->getValue(ColumnKeys::BUNDLE_VALUE_SKU), $selectionId);
     }
 
     /**
@@ -184,6 +183,7 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
                     )
                 );
                 $this->skipRow();
+                return [];
             } else {
                 throw $this->wrapException(array(ColumnKeys::BUNDLE_VALUE_SKU), $e);
             }
