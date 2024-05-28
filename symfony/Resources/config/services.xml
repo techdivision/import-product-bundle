@@ -5,6 +5,7 @@
 
     <parameters>
         <parameter key="import_product_bundle.param.sku.column.name" type="constant">TechDivision\Import\Product\Bundle\Utils\ColumnKeys::BUNDLE_VALUE_SKU</parameter>
+        <parameter key="import_product_bundle.param.parent.sku.column.name" type="constant">TechDivision\Import\Product\Bundle\Utils\ColumnKeys::BUNDLE_PARENT_SKU</parameter>
     </parameters>
 
     <services>
@@ -206,6 +207,10 @@
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="string">%import_product_bundle.param.sku.column.name%</argument>
         </service>
+        <service id="import_product_bundle.observer.parent.sku.entity.id.mapping" class="TechDivision\Import\Product\Observers\GenericSkuEntityIdMappingObserver">
+            <argument type="service" id="import_product.processor.product.bunch"/>
+            <argument type="string">%import_product_bundle.param.parent.sku.column.name%</argument>
+        </service>
 
         <!--
          | The DI configuration for the composite observers of the replace operation.
@@ -232,6 +237,9 @@
          | The DI configuration for the composite observers of the add-update operation.
          |-->
         <service id="import_product_bundle.observer.composite.add_update" class="TechDivision\Import\Observers\GenericCompositeObserver">
+            <call method="addObserver">
+                <argument id="import_product_bundle.observer.parent.sku.entity.id.mapping" type="service"/>
+            </call>
             <call method="addObserver">
                 <argument id="import_product_bundle.observer.sku.entity.id.mapping" type="service"/>
             </call>
