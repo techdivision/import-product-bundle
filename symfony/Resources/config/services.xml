@@ -206,6 +206,10 @@
             <argument type="service" id="import_product.processor.product.bunch"/>
             <argument type="string">%import_product_bundle.param.sku.column.name%</argument>
         </service>
+        <service id="import_product_bundle.observer.clean.up.product.bundle" class="TechDivision\Import\Product\Bundle\Observers\CleanUpBundleProductRelationsObserver">
+            <argument type="service" id="import_product_bundle.processor.product.bundle"/>
+        </service>
+
 
         <!--
          | The DI configuration for the composite observers of the replace operation.
