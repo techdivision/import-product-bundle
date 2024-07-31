@@ -1,3 +1,9 @@
+# Version 25.0.2
+
+## Bugfixes
+
+* Fix php warning undefined array key
+
 # Version 25.0.1
 
 ## Bugfixes
