@@ -58,7 +58,7 @@ class BundleSubject extends AbstractProductSubject implements CleanUpColumnsSubj
         $status = $registryProcessor->getAttribute(RegistryKeys::STATUS);
 
         // load the SKU => entity ID mapping
-        $this->skuEntityIdMapping = $status[RegistryKeys::SKU_ENTITY_ID_MAPPING];
+        $this->skuEntityIdMapping = $status[RegistryKeys::SKU_ENTITY_ID_MAPPING] ?? null;
     }
 
     /**
