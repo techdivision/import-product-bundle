@@ -78,14 +78,14 @@ class BundleSelectionObserver extends AbstractProductImportObserver implements D
      *
      * @param \TechDivision\Import\Product\Bundle\Services\ProductBundleProcessorInterface $productBundleProcessor The product bundle processor instance
      * @param \TechDivision\Import\Observers\AttributeLoaderInterface|null                 $attributeLoader        The attribute loader instance
-     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface           $entityMerger           The entity merger instance
+     * @param \TechDivision\Import\Observers\EntityMergers\EntityMergerInterface|null           $entityMerger           The entity merger instance
      * @param \TechDivision\Import\Observers\StateDetectorInterface|null                   $stateDetector          The state detector instance
      */
     public function __construct(
         ProductBundleProcessorInterface $productBundleProcessor,
-        AttributeLoaderInterface $attributeLoader = null,
-        EntityMergerInterface $entityMerger = null,
-        StateDetectorInterface $stateDetector = null
+        ?AttributeLoaderInterface $attributeLoader = null,
+        ?EntityMergerInterface $entityMerger = null,
+        ?StateDetectorInterface $stateDetector = null
     ) {
 
         // initialize the product bundle processor and the attribute loader instance
