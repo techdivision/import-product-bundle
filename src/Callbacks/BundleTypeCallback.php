@@ -53,6 +53,6 @@ class BundleTypeCallback extends AbstractProductImportCallback
         $this->setObserver($observer);
 
         // replace the passed attribute value into the type ID
-        return (boolean) $this->types[strtolower($observer->getAttributeValue())];
+        return (bool)$this->types[strtolower($observer->getAttributeValue())];
     }
 }
