@@ -53,6 +53,6 @@ class BundlePriceViewCallback extends AbstractProductImportCallback
         $this->setObserver($observer);
 
         // replace the passed attribute value into the view ID
-        return (boolean) $this->views[strtolower($observer->getAttributeValue())];
+        return (bool)$this->views[strtolower($observer->getAttributeValue())];
     }
 }
